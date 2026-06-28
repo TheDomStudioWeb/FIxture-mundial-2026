@@ -1,0 +1,29 @@
+Cómo actualizar tu Fixture a la última versión (Paso a Paso)
+
+Para disfrutar de las nuevas funciones y la descarga correcta de planillas en tu celular, seguí estos 4 simples pasos para actualizar la App:
+
+Paso 1: Eliminar la versión anterior
+
+Buscá el ícono del Fixture en la pantalla principal de tu celular.
+
+Mantené presionado el ícono y seleccioná "Desinstalar" o "Eliminar".
+
+Paso 2: Limpiar los datos guardados (Muy importante)
+
+Abrí tu navegador (Chrome en Android o Safari en iPhone).
+
+Ingresá a la configuración de tu navegador, andá a "Historial" o "Privacidad" y seleccioná "Borrar datos de navegación" (asegurate de borrar las imágenes y archivos almacenados en caché).
+
+Paso 3: Ingresar al enlace actualizado
+
+Hacé clic en nuestro enlace oficial de acceso a la App.
+
+Dejá que la página cargue por completo (verás la pantalla de inicio).
+
+Paso 4: Instalar la nueva App
+
+En Android (Chrome): Tocá los tres puntitos arriba a la derecha y seleccioná "Instalar aplicación" o "Agregar a la pantalla principal".
+
+En iPhone (Safari): Tocá el ícono de "Compartir" (el cuadrado con la flecha hacia arriba) en la parte inferior y seleccioná "Agregar a inicio".
+
+¡Listo! Ya tenés la versión más estable instalada en tu teléfono, lista para descargar tus planillas sin errores.

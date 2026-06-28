@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html lang="es">
+<link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001f3f">
+    <link rel="apple-touch-icon" href="icono-192.png">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixture Interactivo Mundial 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        img.emoji {
+            height: 1.2em;
+            width: 1.2em;
+            margin: 0 .1em 0 .1em;
+            vertical-align: -0.15em;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a1128; /* Azul muy oscuro para el fondo general */
+            margin: 0;
+            padding: 20px;
+            color: #ffffff; /* Texto general blanco */
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
+            color: white;
+            padding: 20px 40px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    font-family: 'Montserrat', sans-serif; /* Fuente tipo FIFA */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2em;
+    font-weight: 800; /* Ultra negrita para impacto */
+    text-transform: uppercase; /* Clásico FIFA: todo en mayúsculas */
+    letter-spacing: 1px; /* Espaciado profesional */
+    color: #ffffff;
+}
+
+.header p {
+    margin: 5px 0 0 0;
+    font-size: 0.9em;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+.header img {
+    height: 70px;
+    margin-right: 30px; /* Separación lateral */
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5)); /* Sombrita suave para que el logo resalte sobre el fondo azul */
+}
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .side-panel {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .center-panel {
+            width: 40%;
+            background: #152238; /* Azul oscuro para panel central */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .group-card {
+            background: #152238; /* Fondo de tarjetas de grupos */
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .group-card h3 {
+            margin-top: 0;
+            color: #ffcc00; /* Dorado para títulos de grupos */
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        th, td {
+            padding: 6px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        th {
+            background-color: #1b263b;
+            color: #d1d1d1;
+        }
+        input[type="number"] {
+            width: 35px;
+            text-align: center;
+            background-color: #0a1128;
+            color: #ffcc00; /* Números en dorado para contraste */
+            border: 1px solid #415a77;
+            border-radius: 4px;
+            font-weight: bold;
+            padding: 3px;
+        }
+        .match-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #2c3e50;
+            font-size: 0.9em;
+        }
+        .team-name {
+            width: 35%;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .team-name.right {
+            text-align: right;
+}
+        .team-name span {
+    display: inline-block; /* Aseguramos que la bandera se dibuje como un bloque */
+}
+        }
+        .bracket-box {
+            background: #152238;
+            border: 1px solid #2c3e50;
+            padding: 10px;
+            width: 90%;
+            border-radius: 6px;
+            margin: 5px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .bracket-title {
+            color: #ffcc00; /* Dorado para títulos de brackets */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+     
+/* Estilo base para todas las banderas */
+.flag {
+    display: inline-block;
+    width: 25px; /* Tamaño profesional */
+    height: 25px;
+    background-size: cover;
+    background-position: center;
+    margin-left: 8px; 
+    margin-right: 8px;
+    /background-color: red;
+    vertical-align: middle;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Generador automático de banderas */
+/* Solo necesitas agregar una línea por cada país que tengas */
+.f-ARG { background-image: url('flags/ARG.png'); }
+.f-MEX { background-image: url('flags/MEX.png'); }
+.f-BRA { background-image: url('flags/BRA.png'); }
+.f-ALE { background-image: url('flags/ALE.png'); }
+.f-ARA { background-image: url('flags/ARA.png'); }
+.f-ALG { background-image: url('flags/ALG.png'); }
+.f-AUS { background-image: url('flags/AUS.png'); }
+.f-AUT { background-image: url('flags/AUT.png'); }
+.f-BEL { background-image: url('flags/BEL.png'); }
+.f-BOS { background-image: url('flags/BOS.png'); }
+.f-CAB { background-image: url('flags/CAB.png'); }
+.f-CAN { background-image: url('flags/CAN.png'); }
+.f-CDM { background-image: url('flags/CDM.png'); }
+.f-COL { background-image: url('flags/COL.png'); }
+.f-COR { background-image: url('flags/COR.png'); }
+.f-CRO { background-image: url('flags/CRO.png'); }
+.f-CUR { background-image: url('flags/CUR.png'); }
+.f-CZE { background-image: url('flags/CZE.png'); }
+.f-ECU { background-image: url('flags/ECU.png'); } 
+.f-EGI { background-image: url('flags/EGI.png'); }
+.f-ESC { background-image: url('flags/ESC.png'); }
+.f-ESP { background-image: url('flags/ESP.png'); }
+.f-FRA { background-image: url('flags/FRA.png'); }
+.f-GHA { background-image: url('flags/GHA.png'); }
+.f-HAI { background-image: url('flags/HAI.png'); }
+.f-ING { background-image: url('flags/ING.png'); }
+.f-IRA { background-image: url('flags/IRA.png'); }
+.f-IRK { background-image: url('flags/IRK.png'); }
+.f-JOR { background-image: url('flags/JOR.png'); }
+.f-JAP { background-image: url('flags/JAP.png'); }
+.f-MAR { background-image: url('flags/MAR.png'); }
+.f-NOR { background-image: url('flags/NOR.png'); }
+.f-NZL { background-image: url('flags/NZL.png'); }
+.f-PBA { background-image: url('flags/PBA.png'); }
+.f-PAN { background-image: url('flags/PAN.png'); }
+.f-PAR { background-image: url('flags/PAR.png'); }
+.f-POR { background-image: url('flags/POR.png'); }
+.f-QAT { background-image: url('flags/QAT.png'); }
+.f-RDC { background-image: url('flags/RDC.png'); }
+.f-SEN { background-image: url('flags/SEN.png'); }
+.f-RSA { background-image: url('flags/RSA.png'); }
+.f-SUE { background-image: url('flags/SUE.png'); }
+.f-SUI { background-image: url('flags/SUI.png'); }
+.f-TUN { background-image: url('flags/TUN.png'); }
+.f-TUR { background-image: url('flags/TUR.png'); }
+.f-URU { background-image: url('flags/URU.png'); }
+.f-USA { background-image: url('flags/USA.png'); }
+.f-UZB { background-image: url('flags/UZB.png'); }
+ 
+      .imagen-podio {
+    display: block;
+    margin: 20px auto;
+    max-width: 400px; /* Ajusta el tamaño según tu diseño */
+    /* Este filtro hace que el blanco se vuelva transparente */
+    filter: drop-shadow(0 0 0 white); 
+    mix-blend-mode: multiply; /* Este es el secreto para ocultar el blanco */
+}
+
+    /* Contenedor principal del podio (donde se sitúa el nombre) */
+.podium-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* La bandera gigante de fondo - posición absoluta para que quede detrás */
+.bg-flag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%; /* Ajusta según el tamaño de tu podio */
+    height: 120%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0,7; /* Sutil como marca de agua */
+    filter: saturate(1.5) brightness(1.2)
+    z-index: 0; /* Detrás de todo */
+}
+
+/* El nombre del equipo sobre la bandera */
+.podium-text {
+    position: relative;
+    z-index: 1; /* Encima de la bandera */
+    font-weight: 900;
+}
+
+   /* ==========================================
+       MODO CELULAR (RESPONSIVE)
+       ========================================== */
+    @media (max-width: 768px) {
+        /* 1. Contenedor principal: Cambia de horizontal a vertical */
+        .dashboard {
+            flex-direction: column !important;
+        }
+
+        /* 2. Paneles de Grupos: Ocupan todo el ancho y van al principio */
+        .side-panel {
+            width: 100% !important;
+            order: 1 !important;
+        }
+
+        /* 3. Panel de Eliminatorias: Ocupa todo el ancho y va al final */
+        .center-panel {
+            width: 100% !important;
+            order: 2 !important;
+            margin-top: 20px !important; /* Espacio para separarlo de los grupos */
+            padding: 10px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 4. Evita que los fondos se salgan de la pantalla */
+        .group-card, .bracket-box {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 10px !important;
+        }
+
+        /* 5. Fila de partidos: Prohibido saltar de línea */
+        .match-row {
+            flex-wrap: nowrap !important;
+            padding: 5px 0 !important;
+            justify-content: space-between !important;
+            gap: 2px !important; /* Margen de seguridad entre elementos */
+        }
+
+        /* 6. Inputs compactos para la pantalla pequeña */
+        input[type="number"] {
+            width: 75px !important;
+            height: 25px !important;
+            font-size: 11px !important;
+            padding: 2px !important;
+            margin: 0 2px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 7. Nombres de equipos: Letra más chica y ancho límite */
+        .team-name {
+            font-size: 15px !important;
+            max-width: 70px !important; /* Límite para no aplastar los cuadros de texto */
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important; /* Si el nombre no entra, le pone "..." */
+        }
+
+        /* 8. Banderas un poco más pequeñas para ganar espacio */
+        .flag {
+            width: 18px !important;
+            height: 18px !important;
+            margin-left: 2px !important;
+            margin-right: 2px !important;
+        }
+
+        /* 9. Tabla de posiciones adaptada */
+        table {
+            width: 100% !important;
+            font-size: 1200:26 6/6/2026px !important;
+            table-layout: fixed !important;
+        }
+    }
+  .bloqueo-estetico {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Mantenemos el fondo oscuro con transparencia para resaltar la tarjeta */
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.bloqueo-card {
+  background: #000080; /* El azul marino intenso que querías */
+  color: #ffffff;      /* Cambiamos el texto a blanco para contrastar */
+  padding: 2.5rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  max-width: 90%;
+  width: 350px;
+}
+
+.error-oculto {
+  color: #ffcc00;      /* Cambiamos el rojo a un amarillo vibrante que destaca más sobre el azul */
+  display: none;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Agregamos esto para que el input se vea bien sobre el fondo azul */
+#codigo-acceso {
+  background: #ffffff !important;
+  color: #000080 !important;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  width: 80%;
+  margin-top: 10px;
+}
+  
+    .match-row div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; /* Le da un poco de aire entre los números y el guion */
+    white-space: nowrap;
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+</head>
+<body>
+    <!-- ESTO ES LO QUE ESTABA FALTANDO -->
+<div id="paywall-overlay" class="bloqueo-estetico"> 
+
+    <!-- TODO TU CONTENIDO DE LA TARJETA VA ACÁ ADENTRO -->
+    <div class="bloqueo-card">
+        <h2 style="font-family: 'Montserrat', sans-serif; margin-bottom: 1.5rem;">🏆 Fixture Interactivo 2026</h2>
+        <p style="margin-bottom: 1.5rem; opacity: 0.9;">Ingresá tu clave oficial para activar la experiencia completa.</p>
+        
+        <input type="password" id="codigo-acceso" placeholder="TU CLAVE DE ACCESO" style="text-align: center; letter-spacing: 1px;">
+        <span onclick="togglePassword()" style="cursor:pointer; margin-left: -30px;">👁️</span>
+        
+        <button onclick="verificarAcceso()" style="display: block; width: 80%; margin: 20px auto; background-color: #ffcc00; color: #001f3f; font-weight: bold; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
+            Activar mi Fixture
+        </button>
+        
+        <p id="error-msg" class="error-oculto">Clave incorrecta. Por favor, verificá e intentá nuevamente.</p>
+        
+        <hr style="border-color: #415a77; margin: 25px 0;">
+        <p style="font-size: 0.85em; margin-bottom: 12px; opacity: 0.8;">¿Llegaste hasta acá y aún no tenés tu pase?</p>
+        <a href="https://wa.me/549XXXXXXXXX?text=Hola!%20Quiero%20info%20para%20adquirir%20la%20clave%20del%20Fixture%20Mundial%202026" 
+           style="display: inline-block; background-color: #20B558; color: white; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; width: 90%; box-sizing: border-box;">
+           📲 Adquirir clave oficial
+        </a>
+    </div>
+
+</div> <!-- ESTE CIERRE ES EL QUE SE HABÍA PERDIDO -->
+</div>
+    <div class="header" style="display: flex; align-items: center; justify-content: flex-start; text-align: left; padding: 15px;">
+    <!-- Logo a la izquierda -->
+    <img src="flags/LOGO.svg" alt="Logo" style="height: 70px; margin-right: 20px;">
+    
+    <!-- Textos agrupados -->
+    <div>
+        <h1 style="margin: 0; font-size: 1.6em;">🏆 Fixture Interactivo Mundial 2026</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.9;">Panel de Control - Carga de Resultados y Posiciones Automáticas</p>
+    </div>
+</div>
+
+<!-- Botón debajo del header como lo tenías antes -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="localStorage.clear(); location.reload();" style="padding: 10px 20px; background-color: #dc3545; color: white; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">🔄 Reiniciar Torneo (Borrar Datos)</button>
+    <button onclick="exportarResultados()" style="padding: 10px 20px; background-color: #28a745; color: white; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">📊 Exportar Datos (Excel)</button>
+</div>
+
+    <div class="dashboard">
+        <div class="side-panel">
+            <div class="group-card">
+                <h3>Grupo A</h3>
+                <div class="matches" id="matches-A">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">MEX<span class="flag f-MEX"></span></span>
+                        <div><input type="number" id="A_m1_home" min="0" onchange="calculateGroup('A', teamsA)"> - <input type="number" id="A_m1_away" min="0" onchange="calculateGroup('A', teamsA)"></div>
+                        <span class="team-name right"><span class="flag f-RSA"></span>RSA</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CZE<span class="flag f-CZE"></span></span>
+                        <div><input type="number" id="A_m2_home" min="0" onchange="calculateGroup('A', teamsA)"> - <input type="number" id="A_m2_away" min="0" onchange="calculateGroup('A', teamsA)"></div>
+                        <span class="team-name right"><span class="flag f-COR"></span>COR</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">MEX<span class="flag f-MEX"></span></span>
+                        <div><input type="number" id="A_m3_home" min="0" onchange="calculateGroup('A', teamsA)"> - <input type="number" id="A_m3_away" min="0" onchange="calculateGroup('A', teamsA)"></div>
+                        <span class="team-name right"><span class="flag f-CZE"></span>CZE</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">RSA<span class="flag f-RSA"></span></span>
+                        <div><input type="number" id="A_m4_home" min="0" onchange="calculateGroup('A', teamsA)"> - <input type="number" id="A_m4_away" min="0" onchange="calculateGroup('A', teamsA)"></div>
+                        <span class="team-name right"><span class="flag f-COR"></span>COR</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">MEX<span class="flag f-MEX"></span></span>
+                        <div><input type="number" id="A_m5_home" min="0" onchange="calculateGroup('A', teamsA)"> - <input type="number" id="A_m5_away" min="0" onchange="calculateGroup('A', teamsA)"></div>
+                        <span class="team-name right"><span class="flag f-COR"></span>COR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">RSA<span class="flag f-RSA"></span></span>
+                        <div><input type="number" id="A_m6_home" min="0" onchange="calculateGroup('A', teamsA)"> - <input type="number" id="A_m6_away" min="0" onchange="calculateGroup('A', teamsA)"></div>
+                        <span class="team-name right"><span class="flag f-CZE"></span>CZE</span>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-A"></tbody>
+                </table>
+            </div>
+             <div class="group-card">
+                <h3>Grupo B</h3>
+                <div class="matches" id="matches-B">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">CAN<span class="flag f-CAN"></span></span>
+                        <div><input type="number" id="B_m1_home" min="0" onchange="calculateGroup('B', teamsB)"> - <input type="number" id="B_m1_away" min="0" onchange="calculateGroup('B', teamsB)"></div>
+                        <span class="team-name right"><span class="flag f-BOS"></span>BOS</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">QAT<span class="flag f-QAT"></span></span>
+                        <div><input type="number" id="B_m2_home" min="0" onchange="calculateGroup('B', teamsB)"> - <input type="number" id="B_m2_away" min="0" onchange="calculateGroup('B', teamsB)"></div>
+                        <span class="team-name right"><span class="flag f-SUI"></span>SUI</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">SUI<span class="flag f-SUI"></span></span>
+                        <div><input type="number" id="B_m3_home" min="0" onchange="calculateGroup('B', teamsB)"> - <input type="number" id="B_m3_away" min="0" onchange="calculateGroup('B', teamsB)"></div>
+                        <span class="team-name right"><span class="flag f-BOS"></span>BOS</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CAN<span class="flag f-CAN"></span></span>
+                        <div><input type="number" id="B_m4_home" min="0" onchange="calculateGroup('B', teamsB)"> - <input type="number" id="B_m4_away" min="0" onchange="calculateGroup('B', teamsB)"></div>
+                        <span class="team-name right"><span class="flag f-QAT"></span>QAT</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">BOS<span class="flag f-BOS"></span></span>
+                        <div><input type="number" id="B_m5_home" min="0" onchange="calculateGroup('B', teamsB)"> - <input type="number" id="B_m5_away" min="0" onchange="calculateGroup('B', teamsB)"></div>
+                        <span class="team-name right"><span class="flag f-QAT"></span>QAT</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">SUI<span class="flag f-SUI"></span></span>
+                        <div><input type="number" id="B_m6_home" min="0" onchange="calculateGroup('B', teamsB)"> - <input type="number" id="B_m6_away" min="0" onchange="calculateGroup('B', teamsB)"></div>
+                        <span class="team-name right"><span class="flag f-CAN"></span>CAN</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-B"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo C</h3>
+                <div class="matches" id="matches-C">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">BRA<span class="flag f-BRA"></span></span>
+                        <div><input type="number" id="C_m1_home" min="0" onchange="calculateGroup('C', teamsC)"> - <input type="number" id="C_m1_away" min="0" onchange="calculateGroup('C', teamsC)"></div>
+                        <span class="team-name right"><span class="flag f-MAR"></span>MAR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">HAI<span class="flag f-HAI"></span></span>
+                        <div><input type="number" id="C_m2_home" min="0" onchange="calculateGroup('C', teamsC)"> - <input type="number" id="C_m2_away" min="0" onchange="calculateGroup('C', teamsC)"></div>
+                        <span class="team-name right"><span class="flag f-ESC"></span>ESC</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">ESC<span class="flag f-ESC"></span></span>
+                        <div><input type="number" id="C_m3_home" min="0" onchange="calculateGroup('C', teamsC)"> - <input type="number" id="C_m3_away" min="0" onchange="calculateGroup('C', teamsC)"></div>
+                        <span class="team-name right"><span class="flag f-MAR"></span>MAR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">BRA<span class="flag f-BRA"></span></span>
+                        <div><input type="number" id="C_m4_home" min="0" onchange="calculateGroup('C', teamsC)"> - <input type="number" id="C_m4_away" min="0" onchange="calculateGroup('C', teamsC)"></div>
+                        <span class="team-name right"><span class="flag f-HAI"></span>HAI</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">ESC<span class="flag f-ESC"></span></span>
+                        <div><input type="number" id="C_m5_home" min="0" onchange="calculateGroup('C', teamsC)"> - <input type="number" id="C_m5_away" min="0" onchange="calculateGroup('C', teamsC)"></div>
+                        <span class="team-name right"><span class="flag f-BRA"></span>BRA</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">MAR<span class="flag f-MAR"></span></span>
+                        <div><input type="number" id="C_m6_home" min="0" onchange="calculateGroup('C', teamsC)"> - <input type="number" id="C_m6_away" min="0" onchange="calculateGroup('C', teamsC)"></div>
+                        <span class="team-name right"><span class="flag f-HAI"></span>HAI</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-C"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo D</h3>
+                <div class="matches" id="matches-D">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">USA<span class="flag f-USA"></span></span>
+                        <div><input type="number" id="D_m1_home" min="0" onchange="calculateGroup('D', teamsD)"> - <input type="number" id="D_m1_away" min="0" onchange="calculateGroup('D', teamsD)"></div>
+                        <span class="team-name right"><span class="flag f-PAR"></span>PAR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">AUS<span class="flag f-AUS"></span></span>
+                        <div><input type="number" id="D_m2_home" min="0" onchange="calculateGroup('D', teamsD)"> - <input type="number" id="D_m2_away" min="0" onchange="calculateGroup('D', teamsD)"></div>
+                        <span class="team-name right"><span class="flag f-TUR"></span>TUR</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">USA<span class="flag f-USA"></span></span>
+                        <div><input type="number" id="D_m3_home" min="0" onchange="calculateGroup('D', teamsD)"> - <input type="number" id="D_m3_away" min="0" onchange="calculateGroup('D', teamsD)"></div>
+                        <span class="team-name right"><span class="flag f-AUS"></span>AUS</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">TUR<span class="flag f-TUR"></span></span>
+                        <div><input type="number" id="D_m4_home" min="0" onchange="calculateGroup('D', teamsD)"> - <input type="number" id="D_m4_away" min="0" onchange="calculateGroup('D', teamsD)"></div>
+                        <span class="team-name right"><span class="flag f-PAR"></span>PAR</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">PAR<span class="flag f-PAR"></span></span>
+                        <div><input type="number" id="D_m5_home" min="0" onchange="calculateGroup('D', teamsD)"> - <input type="number" id="D_m5_away" min="0" onchange="calculateGroup('D', teamsD)"></div>
+                        <span class="team-name right"><span class="flag f-AUS"></span>AUS</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">TUR<span class="flag f-TUR"></span></span>
+                        <div><input type="number" id="D_m6_home" min="0" onchange="calculateGroup('D', teamsD)"> - <input type="number" id="D_m6_away" min="0" onchange="calculateGroup('D', teamsD)"></div>
+                        <span class="team-name right"><span class="flag f-USA"></span>USA</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-D"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo E</h3>
+                <div class="matches" id="matches-E">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">ALE<span class="flag f-ALE"></span></span>
+                        <div><input type="number" id="E_m1_home" min="0" onchange="calculateGroup('E', teamsE)"> - <input type="number" id="E_m1_away" min="0" onchange="calculateGroup('E', teamsE)"></div>
+                        <span class="team-name right"><span class="flag f-CUR"></span>CUR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CDM<span class="flag f-CDM"></span></span>
+                        <div><input type="number" id="E_m2_home" min="0" onchange="calculateGroup('E', teamsE)"> - <input type="number" id="E_m2_away" min="0" onchange="calculateGroup('E', teamsE)"></div>
+                        <span class="team-name right"><span class="flag f-ECU"></span>ECU</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">ALE<span class="flag f-ALE"></span></span>
+                        <div><input type="number" id="E_m3_home" min="0" onchange="calculateGroup('E', teamsE)"> - <input type="number" id="E_m3_away" min="0" onchange="calculateGroup('E', teamsE)"></div>
+                        <span class="team-name right"><span class="flag f-CDM"></span>CDM</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ECU<span class="flag f-ECU"></span></span>
+                        <div><input type="number" id="E_m4_home" min="0" onchange="calculateGroup('E', teamsE)"> - <input type="number" id="E_m4_away" min="0" onchange="calculateGroup('E', teamsE)"></div>
+                        <span class="team-name right"><span class="flag f-CUR"></span>CUR</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">CUR<span class="flag f-CUR"></span></span>
+                        <div><input type="number" id="E_m5_home" min="0" onchange="calculateGroup('E', teamsE)"> - <input type="number" id="E_m5_away" min="0" onchange="calculateGroup('E', teamsE)"></div>
+                        <span class="team-name right"><span class="flag f-CDM"></span>CDM</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ECU<span class="flag f-ECU"></span></span>
+                        <div><input type="number" id="E_m6_home" min="0" onchange="calculateGroup('E', teamsE)"> - <input type="number" id="E_m6_away" min="0" onchange="calculateGroup('E', teamsE)"></div>
+                        <span class="team-name right"><span class="flag f-ALE"></span>ALE</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-E"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo F</h3>
+                <div class="matches" id="matches-F">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">PBA<span class="flag f-PBA"></span></span>
+                        <div><input type="number" id="F_m1_home" min="0" onchange="calculateGroup('F', teamsF)"> - <input type="number" id="F_m1_away" min="0" onchange="calculateGroup('F', teamsF)"></div>
+                        <span class="team-name right"><span class="flag f-JAP"></span>JAP</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">SUE<span class="flag f-SUE"></span></span>
+                        <div><input type="number" id="F_m2_home" min="0" onchange="calculateGroup('F', teamsF)"> - <input type="number" id="F_m2_away" min="0" onchange="calculateGroup('F', teamsF)"></div>
+                        <span class="team-name right"><span class="flag f-TUN"></span>TUN</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">PBA<span class="flag f-PBA"></span></span>
+                        <div><input type="number" id="F_m3_home" min="0" onchange="calculateGroup('F', teamsF)"> - <input type="number" id="F_m3_away" min="0" onchange="calculateGroup('F', teamsF)"></div>
+                        <span class="team-name right"><span class="flag f-SUE"></span>SUE</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">TUN<span class="flag f-TUN"></span></span>
+                        <div><input type="number" id="F_m4_home" min="0" onchange="calculateGroup('F', teamsF)"> - <input type="number" id="F_m4_away" min="0" onchange="calculateGroup('F', teamsF)"></div>
+                        <span class="team-name right"><span class="flag f-JAP"></span>JAP</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">JAP<span class="flag f-JAP"></span></span>
+                        <div><input type="number" id="F_m5_home" min="0" onchange="calculateGroup('F', teamsF)"> - <input type="number" id="F_m5_away" min="0" onchange="calculateGroup('F', teamsF)"></div>
+                        <span class="team-name right"><span class="flag f-SUE"></span>SUE</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">TUN<span class="flag f-TUN"></span></span>
+                        <div><input type="number" id="F_m6_home" min="0" onchange="calculateGroup('F', teamsF)"> - <input type="number" id="F_m6_away" min="0" onchange="calculateGroup('F', teamsF)"></div>
+                        <span class="team-name right"><span class="flag f-PBA"></span>PBA</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-F"></tbody>
+                </table>
+            </div>
+
+        </div>
+
+       <div class="center-panel">
+    <h2>Llaves de Eliminación</h2>
+    
+    <h4 class="bracket-title">16avos de Final</h4>
+            
+    <div class="bracket-box" id="match-73">
+         <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+             <span id="pos-2A" class="team-name">2A</span>
+             <div>
+                 <input type="number" id="K_m73_home" min="0" onchange="advanceKnockout(73, 'pos-2A', 'pos-2B', 'pos-W73')"> - 
+                 <input type="number" id="K_m73_away" min="0" onchange="advanceKnockout(73, 'pos-2A', 'pos-2B', 'pos-W73')">
+             </div>
+             <span id="pos-2B" class="team-name">2B</span>
+         </div>
+    </div>
+
+    <div class="bracket-box" id="match-74">
+        <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+             <span id="pos-1E" class="team-name">1E</span>
+             <div>
+                 <input type="number" id="K_m74_home" min="0" onchange="advanceKnockout(74, 'pos-1E', 'pos-3-P74', 'pos-W74')"> - 
+                 <input type="number" id="K_m74_away" min="0" onchange="advanceKnockout(74, 'pos-1E', 'pos-3-P74', 'pos-W74')">
+             </div>
+             <span id="pos-3-P74" class="team-name">3er</span>
+         </div>
+    </div>
+
+    <div class="bracket-box" id="match-75">
+         <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+             <span id="pos-1F" class="team-name">1F</span>
+             <div>
+                 <input type="number" id="K_m75_home" min="0" onchange="advanceKnockout(75, 'pos-1F', 'pos-2C', 'pos-W75')"> - 
+                 <input type="number" id="K_m75_away" min="0" onchange="advanceKnockout(75, 'pos-1F', 'pos-2C', 'pos-W75')">
+             </div>
+             <span id="pos-2C" class="team-name">2C</span>
+         </div>
+    </div>
+    
+    <div class="bracket-box" id="match-76">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1C" class="team-name">1C</span>
+                     <div>
+                         <input type="number" id="K_m76_home" min="0" onchange="advanceKnockout(76, 'pos-1C', 'pos-2F', 'pos-W76')"> - 
+                         <input type="number" id="K_m76_away" min="0" onchange="advanceKnockout(76, 'pos-1C', 'pos-2F', 'pos-W76')">
+                     </div>
+                     <span id="pos-2F" class="team-name">2F</span>
+                 </div>
+            </div>
+    
+    <div class="bracket-box" id="match-77">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1I" class="team-name">1I</span>
+                     <div>
+                         <input type="number" id="K_m77_home" min="0" onchange="advanceKnockout(77, 'pos-1I', 'pos-3-P77', 'pos-W77')"> - 
+                         <input type="number" id="K_m77_away" min="0" onchange="advanceKnockout(77, 'pos-1I', 'pos-3-P77', 'pos-W77')">
+                     </div>
+                     <span id="pos-3-P77" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-78">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-2E" class="team-name">2E</span>
+                     <div>
+                         <input type="number" id="K_m78_home" min="0" onchange="advanceKnockout(78, 'pos-2E', 'pos-2I', 'pos-W78')"> - 
+                         <input type="number" id="K_m78_away" min="0" onchange="advanceKnockout(78, 'pos-2E', 'pos-2I', 'pos-W78')">
+                     </div>
+                     <span id="pos-2I" class="team-name">2I</span>
+                 </div>
+            </div>
+
+
+    <div class="bracket-box" id="match-79">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1A" class="team-name">1A</span>
+                     <div>
+                         <input type="number" id="K_m79_home" min="0" onchange="advanceKnockout(79, 'pos-1A', 'pos-3-P79', 'pos-W79')"> - 
+                         <input type="number" id="K_m79_away" min="0" onchange="advanceKnockout(79, 'pos-1A', 'pos-3-P79', 'pos-W79')">
+                     </div>
+                     <span id="pos-3-P79" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-80">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1L" class="team-name">1L</span>
+                     <div>
+                         <input type="number" id="K_m80_home" min="0" onchange="advanceKnockout(80, 'pos-1L', 'pos-3-P80', 'pos-W80')"> - 
+                         <input type="number" id="K_m80_away" min="0" onchange="advanceKnockout(80, 'pos-1L', 'pos-3-P80', 'pos-W80')">
+                     </div>
+                     <span id="pos-3-P80" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-81">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1D" class="team-name">1D</span>
+                     <div>
+                         <input type="number" id="K_m81_home" min="0" onchange="advanceKnockout(81, 'pos-1D', 'pos-3-P81', 'pos-W81')"> - 
+                         <input type="number" id="K_m81_away" min="0" onchange="advanceKnockout(81, 'pos-1D', 'pos-3-P81', 'pos-W81')">
+                     </div>
+                     <span id="pos-3-P81" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-82">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1G" class="team-name">1G</span>
+                     <div>
+                         <input type="number" id="K_m82_home" min="0" onchange="advanceKnockout(82, 'pos-1G', 'pos-3-P82', 'pos-W82')"> - 
+                         <input type="number" id="K_m82_away" min="0" onchange="advanceKnockout(82, 'pos-1G', 'pos-3-P82', 'pos-W82')">
+                     </div>
+                     <span id="pos-3-P82" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-83">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-2K" class="team-name">2K</span>
+                     <div>
+                         <input type="number" id="K_m83_home" min="0" onchange="advanceKnockout(83, 'pos-2K', 'pos-2L', 'pos-W83')"> - 
+                         <input type="number" id="K_m83_away" min="0" onchange="advanceKnockout(83, 'pos-2K', 'pos-2L', 'pos-W83')">
+                     </div>
+                     <span id="pos-2L" class="team-name">2L</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-84">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1H" class="team-name">1H</span>
+                     <div>
+                         <input type="number" id="K_m84_home" min="0" onchange="advanceKnockout(84, 'pos-1H', 'pos-2J', 'pos-W84')"> - 
+                         <input type="number" id="K_m84_away" min="0" onchange="advanceKnockout(84, 'pos-1H', 'pos-2J', 'pos-W84')">
+                     </div>
+                     <span id="pos-2J" class="team-name">2J</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-85">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1B" class="team-name">1B</span>
+                     <div>
+                         <input type="number" id="K_m85_home" min="0" onchange="advanceKnockout(85, 'pos-1B', 'pos-3-P85', 'pos-W85')"> - 
+                         <input type="number" id="K_m85_away" min="0" onchange="advanceKnockout(85, 'pos-1B', 'pos-3-P85', 'pos-W85')">
+                     </div>
+                     <span id="pos-3-P85" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-86">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1J" class="team-name">1J</span>
+                     <div>
+                         <input type="number" id="K_m86_home" min="0" onchange="advanceKnockout(86, 'pos-1J', 'pos-2H', 'pos-W86')"> - 
+                         <input type="number" id="K_m86_away" min="0" onchange="advanceKnockout(86, 'pos-1J', 'pos-2H', 'pos-W86')">
+                     </div>
+                     <span id="pos-2H" class="team-name">2H</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-87">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-1K" class="team-name">1K</span>
+                     <div>
+                         <input type="number" id="K_m87_home" min="0" onchange="advanceKnockout(87, 'pos-1K', 'pos-3-P87', 'pos-W87')"> - 
+                         <input type="number" id="K_m87_away" min="0" onchange="advanceKnockout(87, 'pos-1K', 'pos-3-P87', 'pos-W87')">
+                     </div>
+                     <span id="pos-3-P87" class="team-name">3er</span>
+                 </div>
+            </div>
+
+    <div class="bracket-box" id="match-88">
+                 <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                     <span id="pos-2D" class="team-name">2D</span>
+                     <div>
+                         <input type="number" id="K_m88_home" min="0" onchange="advanceKnockout(88, 'pos-2D', 'pos-2G', 'pos-W88')"> - 
+                         <input type="number" id="K_m88_away" min="0" onchange="advanceKnockout(88, 'pos-2D', 'pos-2G', 'pos-W88')">
+                     </div>
+                     <span id="pos-2G" class="team-name">2G</span>
+                 </div>
+            </div>
+    
+    <h4 class="bracket-title">Octavos de Final</h4>
+            
+            <div class="bracket-box" id="match-89" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W74" class="team-name" style="text-align: right;">Ganador 74</span>
+                    <div>
+                        <input type="number" id="K_m89_home" min="0" onchange="advanceKnockout(89, 'pos-W74', 'pos-W77', 'pos-W89')"> - 
+                        <input type="number" id="K_m89_away" min="0" onchange="advanceKnockout(89, 'pos-W74', 'pos-W77', 'pos-W89')">
+                    </div>
+                    <span id="pos-W77" class="team-name" style="text-align: left;">Ganador 77</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-90" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W73" class="team-name" style="text-align: right;">Ganador 73</span>
+                    <div>
+                        <input type="number" id="K_m90_home" min="0" onchange="advanceKnockout(90, 'pos-W73', 'pos-W75', 'pos-W90')"> - 
+                        <input type="number" id="K_m90_away" min="0" onchange="advanceKnockout(90, 'pos-W73', 'pos-W75', 'pos-W90')">
+                    </div>
+                    <span id="pos-W75" class="team-name" style="text-align: left;">Ganador 75</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-91" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W76" class="team-name" style="text-align: right;">Ganador 76</span>
+                    <div>
+                        <input type="number" id="K_m91_home" min="0" onchange="advanceKnockout(91, 'pos-W76', 'pos-W78', 'pos-W91')"> - 
+                        <input type="number" id="K_m91_away" min="0" onchange="advanceKnockout(91, 'pos-W76', 'pos-W78', 'pos-W91')">
+                    </div>
+                    <span id="pos-W78" class="team-name" style="text-align: left;">Ganador 78</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-92" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W79" class="team-name" style="text-align: right;">Ganador 79</span>
+                    <div>
+                        <input type="number" id="K_m92_home" min="0" onchange="advanceKnockout(92, 'pos-W79', 'pos-W80', 'pos-W92')"> - 
+                        <input type="number" id="K_m92_away" min="0" onchange="advanceKnockout(92, 'pos-W79', 'pos-W80', 'pos-W92')">
+                    </div>
+                    <span id="pos-W80" class="team-name" style="text-align: left;">Ganador 80</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-93" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W83" class="team-name" style="text-align: right;">Ganador 83</span>
+                    <div>
+                        <input type="number" id="K_m93_home" min="0" onchange="advanceKnockout(93, 'pos-W83', 'pos-W84', 'pos-W93')"> - 
+                        <input type="number" id="K_m93_away" min="0" onchange="advanceKnockout(93, 'pos-W83', 'pos-W84', 'pos-W93')">
+                    </div>
+                    <span id="pos-W84" class="team-name" style="text-align: left;">Ganador 84</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-94" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W81" class="team-name" style="text-align: right;">Ganador 81</span>
+                    <div>
+                        <input type="number" id="K_m94_home" min="0" onchange="advanceKnockout(94, 'pos-W81', 'pos-W82', 'pos-W94')"> - 
+                        <input type="number" id="K_m94_away" min="0" onchange="advanceKnockout(94, 'pos-W81', 'pos-W82', 'pos-W94')">
+                    </div>
+                    <span id="pos-W82" class="team-name" style="text-align: left;">Ganador 82</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-95" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W86" class="team-name" style="text-align: right;">Ganador 86</span>
+                    <div>
+                        <input type="number" id="K_m95_home" min="0" onchange="advanceKnockout(95, 'pos-W86', 'pos-W88', 'pos-W95')"> - 
+                        <input type="number" id="K_m95_away" min="0" onchange="advanceKnockout(95, 'pos-W86', 'pos-W88', 'pos-W95')">
+                    </div>
+                    <span id="pos-W88" class="team-name" style="text-align: left;">Ganador 88</span>
+                </div>
+            </div>
+
+            <div class="bracket-box" id="match-96" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W85" class="team-name" style="text-align: right;">Ganador 85</span>
+                    <div>
+                        <input type="number" id="K_m96_home" min="0" onchange="advanceKnockout(96, 'pos-W85', 'pos-W87', 'pos-W96')"> - 
+                        <input type="number" id="K_m96_away" min="0" onchange="advanceKnockout(96, 'pos-W85', 'pos-W87', 'pos-W96')">
+                    </div>
+                    <span id="pos-W87" class="team-name" style="text-align: left;">Ganador 87</span>
+                </div>
+            </div>
+
+    <h4 class="bracket-title">Cuartos de Final</h4>
+    <div class="bracket-box" id="match-97" style="padding: 5px;">
+    <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+        <span id="pos-W89" class="team-name">Ganador 89</span>
+        <div>
+            <input type="number" id="K_m97_home" min="0" onchange="advanceKnockout(97, 'pos-W89', 'pos-W90', 'pos-W97')"> - 
+            <input type="number" id="K_m97_away" min="0" onchange="advanceKnockout(97, 'pos-W89', 'pos-W90', 'pos-W97')">
+        </div>
+        <span id="pos-W90" class="team-name">Ganador 90</span>
+    </div>
+</div>
+
+<div class="bracket-box" id="match-98" style="padding: 5px;">
+    <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+        <span id="pos-W93" class="team-name">Ganador 93</span>
+        <div>
+            <input type="number" id="K_m98_home" min="0" onchange="advanceKnockout(98, 'pos-W93', 'pos-W94', 'pos-W98')"> - 
+            <input type="number" id="K_m98_away" min="0" onchange="advanceKnockout(98, 'pos-W93', 'pos-W94', 'pos-W98')">
+        </div>
+        <span id="pos-W94" class="team-name">Ganador 94</span>
+    </div>
+</div>
+
+
+    <div class="bracket-box" id="match-99" style="padding: 5px;">
+    <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+        <span id="pos-W91" class="team-name">Ganador 91</span>
+        <div>
+            <input type="number" id="K_m99_home" min="0" onchange="advanceKnockout(99, 'pos-W91', 'pos-W92', 'pos-W99')"> - 
+            <input type="number" id="K_m99_away" min="0" onchange="advanceKnockout(99, 'pos-W91', 'pos-W92', 'pos-W99')">
+        </div>
+        <span id="pos-W92" class="team-name">Ganador 92</span>
+    </div>
+</div>
+
+    <div class="bracket-box" id="match-100" style="padding: 5px;">
+    <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+        <span id="pos-W95" class="team-name">Ganador 95</span>
+        <div>
+            <input type="number" id="K_m100_home" min="0" onchange="advanceKnockout(100, 'pos-W95', 'pos-W96', 'pos-W100')"> - 
+            <input type="number" id="K_m100_away" min="0" onchange="advanceKnockout(100, 'pos-W95', 'pos-W96', 'pos-W100')">
+        </div>
+        <span id="pos-W96" class="team-name">Ganador 96</span>
+    </div>
+</div>
+    
+    <h4 class="bracket-title">Semifinal</h4>
+    <div class="bracket-box" id="match-101" style="padding: 5px;">
+    <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+        <span id="pos-W97" class="team-name">Ganador 97</span>
+        <div>
+            <input type="number" id="K_m101_home" min="0" onchange="advanceKnockout(101, 'pos-W97', 'pos-W98', 'pos-W101', 'pos-L101')"> - 
+            <input type="number" id="K_m101_away" min="0" onchange="advanceKnockout(101, 'pos-W97', 'pos-W98', 'pos-W101', 'pos-L101')">
+        </div>
+        <span id="pos-W98" class="team-name">Ganador 98</span>
+    </div>
+</div>
+
+<div class="bracket-box" id="match-102" style="padding: 5px;">
+    <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+        <span id="pos-W99" class="team-name">Ganador 99</span>
+        <div>
+            <input type="number" id="K_m102_home" min="0" onchange="advanceKnockout(102, 'pos-W99', 'pos-W100', 'pos-W102', 'pos-L102')"> - 
+            <input type="number" id="K_m102_away" min="0" onchange="advanceKnockout(102, 'pos-W99', 'pos-W100', 'pos-W102', 'pos-L102')">
+        </div>
+        <span id="pos-W100" class="team-name">Ganador 100</span>
+    </div>
+</div>
+    
+    <h4 class="bracket-title">Tercer Puesto</h4>
+            <div class="bracket-box" id="match-103" style="padding: 5px;">
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-L101" class="team-name">Perdedor 101</span>
+                    <div>
+                        <input type="number" id="K_m103_home" min="0" onchange="advanceKnockout(103, 'pos-L101', 'pos-L102', 'podium-3')"> - 
+                        <input type="number" id="K_m103_away" min="0" onchange="advanceKnockout(103, 'pos-L101', 'pos-L102', 'podium-3')">
+                    </div>
+                    <span id="pos-L102" class="team-name">Perdedor 102</span>
+                </div>
+            </div>
+            
+            <h4 class="bracket-title">Final</h4>
+            <div class="bracket-box" id="match-104" style="background: linear-gradient(135deg, #ffd700 0%, #daa520 100%); border: 2px solid #b8860b; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                <div style="text-align: center; font-weight: bold; margin-bottom: 5px; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">🏆 GRAN FINAL 🏆</div>
+                <div class="match-row" style="border:none; justify-content: center; gap: 10px;">
+                    <span id="pos-W101" class="team-name" style="color:#000; font-weight:bold;">Ganador 101</span>
+                    <div>
+                        <input type="number" id="K_m104_home" min="0" onchange="advanceKnockout(104, 'pos-W101', 'pos-W102', 'podium-1', 'podium-2')"> - 
+                        <input type="number" id="K_m104_away" min="0" onchange="advanceKnockout(104, 'pos-W101', 'pos-W102', 'podium-1', 'podium-2')">
+                    </div>
+                    <span id="pos-W102" class="team-name" style="color:#000; font-weight:bold;">Ganador 102</span>
+                </div>
+              </div>
+        <div class="podium-container" style="background: #fff; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-top: 30px; margin-bottom: 30px; font-family: 'Arial Black', Impact, sans-serif;">
+                <h2 style="color: #b8860b; text-transform: uppercase; margin-top: 0; font-size: 1.5em; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">🏆 Campeones del mundo 🏆</h2>
+                
+                <div style="display: flex; justify-content: center; align-items: flex-end; height: 160px; gap: 5px; margin-top: 30px;">
+                    <div style="width: 30%; display: flex; flex-direction: column; align-items: center;">
+                        <span id="podium-2" style="font-size: 1.2em; font-weight: bold; color: #34495e; margin-bottom: 5px;">---</span>
+                        <div style="width: 100%; height: 60px; background: linear-gradient(to top, #bdc3c7, #ecf0f1); border-radius: 5px 5px 0 0; display: flex; justify-content: center; align-items: center; font-size: 1.8em; color: #7f8c8d; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); border: 1px solid #bdc3c7; border-bottom: none;">🥈</div>
+                    </div>
+                    <div style="width: 40%; display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                        <span id="podium-1" style="font-size: 1.6em; font-weight: bold; color: #d35400; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); text-transform: uppercase;">---</span>
+                        <div style="width: 100%; height: 100px; background: linear-gradient(to top, #f1c40f, #f39c12); border-radius: 5px 5px 0 0; display: flex; justify-content: center; align-items: center; font-size: 2.5em; color: #fff; box-shadow: inset 0 0 15px rgba(0,0,0,0.2), 0 -5px 15px rgba(243, 156, 18, 0.4); border: 1px solid #d4ac0d; border-bottom: none;">👑</div>
+                    </div>
+                    <div style="width: 30%; display: flex; flex-direction: column; align-items: center;">
+                        <span id="podium-3" style="font-size: 1.1em; font-weight: bold; color: #a0522d; margin-bottom: 5px;">---</span>
+                        <div style="width: 100%; height: 40px; background: linear-gradient(to top, #cd853f, #deb887); border-radius: 5px 5px 0 0; display: flex; justify-content: center; align-items: center; font-size: 1.5em; color: #fff; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); border: 1px solid #b8860b; border-bottom: none;">🥉</div>
+                    </div>
+                </div>
+ <img src="flags/footer_page.jpg" alt="Mundial 2026" class="imagen-podio">
+            </div>
+          </div>
+
+        <div class="side-panel">
+            
+            <div class="group-card">
+                <h3>Grupo G</h3>
+                <div class="matches" id="matches-G">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">BEL<span class="flag f-BEL"></span></span>
+                        <div><input type="number" id="G_m1_home" min="0" onchange="calculateGroup('G', teamsG)"> - <input type="number" id="G_m1_away" min="0" onchange="calculateGroup('G', teamsG)"></div>
+                        <span class="team-name right"><span class="flag f-EGI"></span>EGI</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">IRA<span class="flag f-IRA"></span></span>
+                        <div><input type="number" id="G_m2_home" min="0" onchange="calculateGroup('G', teamsG)"> - <input type="number" id="G_m2_away" min="0" onchange="calculateGroup('G', teamsG)"></div>
+                        <span class="team-name right"><span class="flag f-NZL"></span>NZL</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">BEL<span class="flag f-BEL"></span></span>
+                        <div><input type="number" id="G_m3_home" min="0" onchange="calculateGroup('G', teamsG)"> - <input type="number" id="G_m3_away" min="0" onchange="calculateGroup('G', teamsG)"></div>
+                        <span class="team-name right"><span class="flag f-IRA"></span>IRA</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">EGI<span class="flag f-EGI"></span></span>
+                        <div><input type="number" id="G_m4_home" min="0" onchange="calculateGroup('G', teamsG)"> - <input type="number" id="G_m4_away" min="0" onchange="calculateGroup('G', teamsG)"></div>
+                        <span class="team-name right"><span class="flag f-NZL"></span>NZL</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">BEL<span class="flag f-BEL"></span></span>
+                        <div><input type="number" id="G_m5_home" min="0" onchange="calculateGroup('G', teamsG)"> - <input type="number" id="G_m5_away" min="0" onchange="calculateGroup('G', teamsG)"></div>
+                        <span class="team-name right"><span class="flag f-NZL"></span>NZL</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">EGI<span class="flag f-EGI"></span></span>
+                        <div><input type="number" id="G_m6_home" min="0" onchange="calculateGroup('G', teamsG)"> - <input type="number" id="G_m6_away" min="0" onchange="calculateGroup('G', teamsG)"></div>
+                        <span class="team-name right"><span class="flag f-IRA"></span>IRA</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-G"></tbody>
+                </table>
+            </div>
+
+            <div class="group-card">
+                <h3>Grupo H</h3>
+                <div class="matches" id="matches-H">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">ESP<span class="flag f-ESP"></span></span>
+                        <div><input type="number" id="H_m1_home" min="0" onchange="calculateGroup('H', teamsH)"> - <input type="number" id="H_m1_away" min="0" onchange="calculateGroup('H', teamsH)"></div>
+                        <span class="team-name right"><span class="flag f-CAB"></span>CAB</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ARA<span class="flag f-ARA"></span></span>
+                        <div><input type="number" id="H_m2_home" min="0" onchange="calculateGroup('H', teamsH)"> - <input type="number" id="H_m2_away" min="0" onchange="calculateGroup('H', teamsH)"></div>
+                        <span class="team-name right"><span class="flag f-URU"></span>URU</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">ESP<span class="flag f-ESP"></span></span>
+                        <div><input type="number" id="H_m3_home" min="0" onchange="calculateGroup('H', teamsH)"> - <input type="number" id="H_m3_away" min="0" onchange="calculateGroup('H', teamsH)"></div>
+                        <span class="team-name right"><span class="flag f-ARA"></span>ARA</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CAB<span class="flag f-CAB"></span></span>
+                        <div><input type="number" id="H_m4_home" min="0" onchange="calculateGroup('H', teamsH)"> - <input type="number" id="H_m4_away" min="0" onchange="calculateGroup('H', teamsH)"></div>
+                        <span class="team-name right"><span class="flag f-URU"></span>URU</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">ESP<span class="flag f-ESP"></span></span>
+                        <div><input type="number" id="H_m5_home" min="0" onchange="calculateGroup('H', teamsH)"> - <input type="number" id="H_m5_away" min="0" onchange="calculateGroup('H', teamsH)"></div>
+                        <span class="team-name right"><span class="flag f-URU"></span>URU</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CAB<span class="flag f-CAB"></span></span>
+                        <div><input type="number" id="H_m6_home" min="0" onchange="calculateGroup('H', teamsH)"> - <input type="number" id="H_m6_away" min="0" onchange="calculateGroup('H', teamsH)"></div>
+                        <span class="team-name right"><span class="flag f-ARA"></span>ARA</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-H"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo I</h3>
+                <div class="matches" id="matches-I">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">FRA<span class="flag f-FRA"></span></span>
+                        <div><input type="number" id="I_m1_home" min="0" onchange="calculateGroup('I', teamsI)"> - <input type="number" id="I_m1_away" min="0" onchange="calculateGroup('I', teamsI)"></div>
+                        <span class="team-name right"><span class="flag f-SEN"></span>SEN</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">IRK<span class="flag f-IRK"></span></span>
+                        <div><input type="number" id="I_m2_home" min="0" onchange="calculateGroup('I', teamsI)"> - <input type="number" id="I_m2_away" min="0" onchange="calculateGroup('I', teamsI)"></div>
+                        <span class="team-name right"><span class="flag f-NOR"></span>NOR</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">FRA<span class="flag f-FRA"></span></span>
+                        <div><input type="number" id="I_m3_home" min="0" onchange="calculateGroup('I', teamsI)"> - <input type="number" id="I_m3_away" min="0" onchange="calculateGroup('I', teamsI)"></div>
+                        <span class="team-name right"><span class="flag f-IRK"></span>IRK</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">SEN<span class="flag f-SEN"></span></span>
+                        <div><input type="number" id="I_m4_home" min="0" onchange="calculateGroup('I', teamsI)"> - <input type="number" id="I_m4_away" min="0" onchange="calculateGroup('I', teamsI)"></div>
+                        <span class="team-name right"><span class="flag f-NOR"></span>NOR</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">FRA<span class="flag f-FRA"></span></span>
+                        <div><input type="number" id="I_m5_home" min="0" onchange="calculateGroup('I', teamsI)"> - <input type="number" id="I_m5_away" min="0" onchange="calculateGroup('I', teamsI)"></div>
+                        <span class="team-name right"><span class="flag f-NOR"></span>NOR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">SEN<span class="flag f-SEN"></span></span>
+                        <div><input type="number" id="I_m6_home" min="0" onchange="calculateGroup('I', teamsI)"> - <input type="number" id="I_m6_away" min="0" onchange="calculateGroup('I', teamsI)"></div>
+                        <span class="team-name right"><span class="flag f-IRK"></span>IRK</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-I"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo J</h3>
+                
+                <div class="matches" id="matches-J">
+                    <div class="match-row">
+                        <span class="team-name">ARG<span class="flag f-ARG"></span></span>
+                        <div><input type="number" id="J_m1_home" min="0" onchange="calculateGroup('J', teamsJ)"> - <input type="number" id="J_m1_away" min="0" onchange="calculateGroup('J', teamsJ)"></div>
+                        <span class="team-name right"><span class="flag f-ALG"></span>ALG</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">AUT<span class="flag f-AUT"></span></span>
+                        <div><input type="number" id="J_m2_home" min="0" onchange="calculateGroup('J', teamsJ)"> - <input type="number" id="J_m2_away" min="0" onchange="calculateGroup('J', teamsJ)"></div>
+                        <span class="team-name right"><span class="flag f-JOR"></span>JOR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ARG<span class="flag f-ARG"></span></span>
+                        <div><input type="number" id="J_m3_home" min="0" onchange="calculateGroup('J', teamsJ)"> - <input type="number" id="J_m3_away" min="0" onchange="calculateGroup('J', teamsJ)"></div>
+                        <span class="team-name right"><span class="flag f-AUT"></span>AUT</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ALG<span class="flag f-ALG"></span></span>
+                        <div><input type="number" id="J_m4_home" min="0" onchange="calculateGroup('J', teamsJ)"> - <input type="number" id="J_m4_away" min="0" onchange="calculateGroup('J', teamsJ)"></div>
+                        <span class="team-name right"><span class="flag f-JOR"></span>JOR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ARG<span class="flag f-ARG"></span></span>
+                        <div><input type="number" id="J_m5_home" min="0" onchange="calculateGroup('J', teamsJ)"> - <input type="number" id="J_m5_away" min="0" onchange="calculateGroup('J', teamsJ)"></div>
+                        <span class="team-name right"><span class="flag f-JOR"></span>JOR</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">ALG<span class="flag f-ALG"></span></span>
+                        <div><input type="number" id="J_m6_home" min="0" onchange="calculateGroup('J', teamsJ)"> - <input type="number" id="J_m6_away" min="0" onchange="calculateGroup('J', teamsJ)"></div>
+                        <span class="team-name right"><span class="flag f-AUT"></span>AUT</span>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-J">
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="group-card">
+                <h3>Grupo K</h3>
+                <div class="matches" id="matches-K">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">POR<span class="flag f-POR"></span></span>
+                        <div><input type="number" id="K_m1_home" min="0" onchange="calculateGroup('K', teamsK)"> - <input type="number" id="K_m1_away" min="0" onchange="calculateGroup('K', teamsK)"></div>
+                        <span class="team-name right"><span class="flag f-RDC"></span>RDC</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">UZB<span class="flag f-UZB"></span></span>
+                        <div><input type="number" id="K_m2_home" min="0" onchange="calculateGroup('K', teamsK)"> - <input type="number" id="K_m2_away" min="0" onchange="calculateGroup('K', teamsK)"></div>
+                        <span class="team-name right"><span class="flag f-COL"></span>COL</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">POR<span class="flag f-POR"></span></span>
+                        <div><input type="number" id="K_m3_home" min="0" onchange="calculateGroup('K', teamsK)"> - <input type="number" id="K_m3_away" min="0" onchange="calculateGroup('K', teamsK)"></div>
+                        <span class="team-name right"><span class="flag f-UZB"></span>UZB</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">RDC<span class="flag f-RDC"></span></span>
+                        <div><input type="number" id="K_m4_home" min="0" onchange="calculateGroup('K', teamsK)"> - <input type="number" id="K_m4_away" min="0" onchange="calculateGroup('K', teamsK)"></div>
+                        <span class="team-name right"><span class="flag f-COL"></span>COL</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">POR<span class="flag f-POR"></span></span>
+                        <div><input type="number" id="K_m5_home" min="0" onchange="calculateGroup('K', teamsK)"> - <input type="number" id="K_m5_away" min="0" onchange="calculateGroup('K', teamsK)"></div>
+                        <span class="team-name right"><span class="flag f-COL"></span>COL</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">RDC<span class="flag f-RDC"></span></span>
+                        <div><input type="number" id="K_m6_home" min="0" onchange="calculateGroup('K', teamsK)"> - <input type="number" id="K_m6_away" min="0" onchange="calculateGroup('K', teamsK)"></div>
+                        <span class="team-name right"><span class="flag f-UZB"></span>UZB</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-K"></tbody>
+                </table>
+            </div>
+
+             <div class="group-card">
+                <h3>Grupo L</h3>
+                <div class="matches" id="matches-L">
+                    <!-- Fecha 1 -->
+                    <div class="match-row">
+                        <span class="team-name">ING<span class="flag f-ING"></span></span>
+                        <div><input type="number" id="L_m1_home" min="0" onchange="calculateGroup('L', teamsL)"> - <input type="number" id="L_m1_away" min="0" onchange="calculateGroup('L', teamsL)"></div>
+                        <span class="team-name right"><span class="flag f-CRO"></span>CRO</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">GHA<span class="flag f-GHA"></span></span>
+                        <div><input type="number" id="L_m2_home" min="0" onchange="calculateGroup('L', teamsL)"> - <input type="number" id="L_m2_away" min="0" onchange="calculateGroup('L', teamsL)"></div>
+                        <span class="team-name right"><span class="flag f-PAN"></span>PAN</span>
+                    </div>
+                    <!-- Fecha 2 -->
+                    <div class="match-row">
+                        <span class="team-name">ING<span class="flag f-ING"></span></span>
+                        <div><input type="number" id="L_m3_home" min="0" onchange="calculateGroup('L', teamsL)"> - <input type="number" id="L_m3_away" min="0" onchange="calculateGroup('L', teamsL)"></div>
+                        <span class="team-name right"><span class="flag f-GHA"></span>GHA</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CRO<span class="flag f-CRO"></span></span>
+                        <div><input type="number" id="L_m4_home" min="0" onchange="calculateGroup('L', teamsL)"> - <input type="number" id="L_m4_away" min="0" onchange="calculateGroup('L', teamsL)"></div>
+                        <span class="team-name right"><span class="flag f-PAN"></span>PAN</span>
+                    </div>
+                    <!-- Fecha 3 -->
+                    <div class="match-row">
+                        <span class="team-name">ING<span class="flag f-ING"></span></span>
+                        <div><input type="number" id="L_m5_home" min="0" onchange="calculateGroup('L', teamsL)"> - <input type="number" id="L_m5_away" min="0" onchange="calculateGroup('L', teamsL)"></div>
+                        <span class="team-name right"><span class="flag f-PAN"></span>PAN</span>
+                    </div>
+                    <div class="match-row">
+                        <span class="team-name">CRO<span class="flag f-CRO"></span></span>
+                        <div><input type="number" id="L_m6_home" min="0" onchange="calculateGroup('L', teamsL)"> - <input type="number" id="L_m6_away" min="0" onchange="calculateGroup('L', teamsL)"></div>
+                        <span class="team-name right"><span class="flag f-GHA"></span>GHA</span>
+                    </div>
+                   </div>
+
+                <h4 style="margin-bottom: 5px; color: #555;">Tabla de Posiciones</h4>
+                <table>
+                    <thead>
+                        <tr><th>Equipo</th><th>Pts</th><th>PJ</th><th>GF</th><th>GC</th><th>DG</th></tr>
+                    </thead>
+                    <tbody id="table-L"></tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+
+        <script>
+        // ==========================================
+        // 0. MOTOR DE BANDERAS (SEGURO ANTI-FALLOS)
+        // ==========================================
+       // function renderFlags() {
+       //    try {
+        //        if (typeof twemoji !== 'undefined') {
+                    // Usamos SVG para que tengan calidad ultra HD
+        //            twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+         //       }
+         //   } catch (e) {
+         //       console.log("Twemoji pendiente, pero el torneo continúa.");
+       //    }
+       // }
+
+        // ==========================================
+        // 1. DEFINICIÓN DE EQUIPOS POR GRUPO
+        // ==========================================
+        let teamsA = [{ name: '<span class="flag f-MEX"></span>MEX', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-RSA"></span>RSA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-CZE"></span>CZE', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-COR"></span>COR', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsB = [{ name: '<span class="flag f-CAN"></span>CAN', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-BOS"></span>BOS', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-QAT"></span>QAT', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-SUI"></span>SUI', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsC = [{ name: '<span class="flag f-BRA"></span>BRA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-MAR"></span>MAR', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-HAI"></span>HAI', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-ESC"></span>ESC', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsD = [{ name: '<span class="flag f-USA"></span>USA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-PAR"></span>PAR', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-AUS"></span>AUS', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-TUR"></span>TUR', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsE = [{ name: '<span class="flag f-ALE"></span>ALE', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-CUR"></span>CUR', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-CDM"></span>CDM', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-ECU"></span>ECU', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsF = [{ name: '<span class="flag f-PBA"></span>PBA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-JAP"></span>JAP', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-SUE"></span>SUE', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-TUN"></span>TUN', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsG = [{ name: '<span class="flag f-BEL"></span>BEL', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-EGI"></span>EGI', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-IRA"></span>IRA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-NZL"></span>NZL', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsH = [{ name: '<span class="flag f-ESP"></span>ESP', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-CAB"></span>CAB', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-ARA"></span>ARA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-URU"></span>URU', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsI = [{ name: '<span class="flag f-FRA"></span>FRA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-SEN"></span>SEN', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-IRK"></span>IRK', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-NOR"></span>NOR', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsJ = [{ name: '<span class="flag f-ARG"></span>ARG', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-ALG"></span>ALG', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-AUT"></span>AUT', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-JOR"></span>JOR', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsK = [{ name: '<span class="flag f-POR"></span>POR', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-RDC"></span>RDC', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-UZB"></span>UZB', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-COL"></span>COL', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+        let teamsL = [{ name: '<span class="flag f-ING"></span>ING', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-CRO"></span>CRO', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-GHA"></span>GHA', pts:0, pj:0, gf:0, gc:0, dg:0 }, { name: '<span class="flag f-PAN"></span>PAN', pts:0, pj:0, gf:0, gc:0, dg:0 }];
+
+        // ==========================================
+        // 2. FUNCIONES DE CÁLCULO DE PUNTOS
+        // ==========================================
+        function resetTeams(groupArray) {
+            groupArray.forEach(t => { t.pts = 0; t.pj = 0; t.gf = 0; t.gc = 0; t.dg = 0; });
+        }
+
+        function processMatch(groupArray, homeName, awayName, homeId, awayId) {
+            let hInput = document.getElementById(homeId);
+            let aInput = document.getElementById(awayId);
+            
+            if (!hInput || !aInput || hInput.value === "" || aInput.value === "") return;
+            
+            let home = groupArray.find(t => t.name.includes(homeName));
+            let away = groupArray.find(t => t.name.includes(awayName));
+            if (!home || !away) return;
+
+            let hG = parseInt(hInput.value);
+            let aG = parseInt(aInput.value);
+
+            home.pj++; away.pj++;
+            home.gf += hG; home.gc += aG; home.dg = home.gf - home.gc;
+            away.gf += aG; away.gc += hG; away.dg = away.gf - away.gc;
+
+            if (hG > aG) { home.pts += 3; } 
+            else if (aG > hG) { away.pts += 3; } 
+            else { home.pts += 1; away.pts += 1; }
+        }
+
+        function renderTable(groupId, groupArray) {
+    let tbody = document.getElementById('table-' + groupId);
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    
+    groupArray.forEach((t, index) => {
+        // Asumiendo que t.name tiene un formato tipo "ARG", "MEX", etc. 
+        // Si el código es diferente, ajusta 't.name' por la propiedad que tenga el código
+        let row = `<tr style="${index < 2 ? 'background-color: rgba(212, 175, 55, 0.15);' : ''}">
+                        <td style="font-weight:bold; text-align:left;">
+                            </span>${t.name}
+                        </td>
+                        <td><b>${t.pts}</b></td>
+                        <td>${t.pj}</td>
+                        <td>${t.gf}</td>
+                        <td>${t.gc}</td>
+                        <td>${t.dg > 0 ? '+'+t.dg : t.dg}</td>
+                   </tr>`;
+        tbody.innerHTML += row;
+    });
+}
+
+        function calculateGroup(groupId, groupArray) {
+            resetTeams(groupArray);
+            console.log("Calculando grupo: " + groupId);
+            
+            if(groupId === 'A') { processMatch(groupArray, 'MEX', 'RSA', 'A_m1_home', 'A_m1_away'); processMatch(groupArray, 'CZE', 'COR', 'A_m2_home', 'A_m2_away'); processMatch(groupArray, 'MEX', 'CZE', 'A_m3_home', 'A_m3_away'); processMatch(groupArray, 'RSA', 'COR', 'A_m4_home', 'A_m4_away'); processMatch(groupArray, 'MEX', 'COR', 'A_m5_home', 'A_m5_away'); processMatch(groupArray, 'RSA', 'CZE', 'A_m6_home', 'A_m6_away'); }
+            if(groupId === 'B') { processMatch(groupArray, 'CAN', 'BOS', 'B_m1_home', 'B_m1_away'); processMatch(groupArray, 'QAT', 'SUI', 'B_m2_home', 'B_m2_away'); processMatch(groupArray, 'SUI', 'BOS', 'B_m3_home', 'B_m3_away'); processMatch(groupArray, 'CAN', 'QAT', 'B_m4_home', 'B_m4_away'); processMatch(groupArray, 'BOS', 'QAT', 'B_m5_home', 'B_m5_away'); processMatch(groupArray, 'SUI', 'CAN', 'B_m6_home', 'B_m6_away'); }
+            if(groupId === 'C') { processMatch(groupArray, 'BRA', 'MAR', 'C_m1_home', 'C_m1_away'); processMatch(groupArray, 'HAI', 'ESC', 'C_m2_home', 'C_m2_away'); processMatch(groupArray, 'ESC', 'MAR', 'C_m3_home', 'C_m3_away'); processMatch(groupArray, 'BRA', 'HAI', 'C_m4_home', 'C_m4_away'); processMatch(groupArray, 'ESC', 'BRA', 'C_m5_home', 'C_m5_away'); processMatch(groupArray, 'MAR', 'HAI', 'C_m6_home', 'C_m6_away'); }
+            if(groupId === 'D') { processMatch(groupArray, 'USA', 'PAR', 'D_m1_home', 'D_m1_away'); processMatch(groupArray, 'AUS', 'TUR', 'D_m2_home', 'D_m2_away'); processMatch(groupArray, 'USA', 'AUS', 'D_m3_home', 'D_m3_away'); processMatch(groupArray, 'TUR', 'PAR', 'D_m4_home', 'D_m4_away'); processMatch(groupArray, 'PAR', 'AUS', 'D_m5_home', 'D_m5_away'); processMatch(groupArray, 'TUR', 'USA', 'D_m6_home', 'D_m6_away'); }
+            if(groupId === 'E') { processMatch(groupArray, 'ALE', 'CUR', 'E_m1_home', 'E_m1_away'); processMatch(groupArray, 'CDM', 'ECU', 'E_m2_home', 'E_m2_away'); processMatch(groupArray, 'ALE', 'CDM', 'E_m3_home', 'E_m3_away'); processMatch(groupArray, 'ECU', 'CUR', 'E_m4_home', 'E_m4_away'); processMatch(groupArray, 'CUR', 'CDM', 'E_m5_home', 'E_m5_away'); processMatch(groupArray, 'ECU', 'ALE', 'E_m6_home', 'E_m6_away'); }
+            if(groupId === 'F') { processMatch(groupArray, 'PBA', 'JAP', 'F_m1_home', 'F_m1_away'); processMatch(groupArray, 'SUE', 'TUN', 'F_m2_home', 'F_m2_away'); processMatch(groupArray, 'PBA', 'SUE', 'F_m3_home', 'F_m3_away'); processMatch(groupArray, 'TUN', 'JAP', 'F_m4_home', 'F_m4_away'); processMatch(groupArray, 'JAP', 'SUE', 'F_m5_home', 'F_m5_away'); processMatch(groupArray, 'TUN', 'PBA', 'F_m6_home', 'F_m6_away'); }
+            if(groupId === 'G') { processMatch(groupArray, 'BEL', 'EGI', 'G_m1_home', 'G_m1_away'); processMatch(groupArray, 'IRA', 'NZL', 'G_m2_home', 'G_m2_away'); processMatch(groupArray, 'BEL', 'IRA', 'G_m3_home', 'G_m3_away'); processMatch(groupArray, 'EGI', 'NZL', 'G_m4_home', 'G_m4_away'); processMatch(groupArray, 'BEL', 'NZL', 'G_m5_home', 'G_m5_away'); processMatch(groupArray, 'EGI', 'IRA', 'G_m6_home', 'G_m6_away'); }
+            if(groupId === 'H') { processMatch(groupArray, 'ESP', 'CAB', 'H_m1_home', 'H_m1_away'); processMatch(groupArray, 'ARA', 'URU', 'H_m2_home', 'H_m2_away'); processMatch(groupArray, 'ESP', 'ARA', 'H_m3_home', 'H_m3_away'); processMatch(groupArray, 'CAB', 'URU', 'H_m4_home', 'H_m4_away'); processMatch(groupArray, 'ESP', 'URU', 'H_m5_home', 'H_m5_away'); processMatch(groupArray, 'CAB', 'ARA', 'H_m6_home', 'H_m6_away'); }
+            if(groupId === 'I') { processMatch(groupArray, 'FRA', 'SEN', 'I_m1_home', 'I_m1_away'); processMatch(groupArray, 'IRK', 'NOR', 'I_m2_home', 'I_m2_away'); processMatch(groupArray, 'FRA', 'IRK', 'I_m3_home', 'I_m3_away'); processMatch(groupArray, 'SEN', 'NOR', 'I_m4_home', 'I_m4_away'); processMatch(groupArray, 'FRA', 'NOR', 'I_m5_home', 'I_m5_away'); processMatch(groupArray, 'SEN', 'IRK', 'I_m6_home', 'I_m6_away'); }
+            if(groupId === 'J') { processMatch(groupArray, 'ARG', 'ALG', 'J_m1_home', 'J_m1_away'); processMatch(groupArray, 'AUT', 'JOR', 'J_m2_home', 'J_m2_away'); processMatch(groupArray, 'ARG', 'AUT', 'J_m3_home', 'J_m3_away'); processMatch(groupArray, 'ALG', 'JOR', 'J_m4_home', 'J_m4_away'); processMatch(groupArray, 'ARG', 'JOR', 'J_m5_home', 'J_m5_away'); processMatch(groupArray, 'ALG', 'AUT', 'J_m6_home', 'J_m6_away'); }
+            if(groupId === 'K') { processMatch(groupArray, 'POR', 'RDC', 'K_m1_home', 'K_m1_away'); processMatch(groupArray, 'UZB', 'COL', 'K_m2_home', 'K_m2_away'); processMatch(groupArray, 'POR', 'UZB', 'K_m3_home', 'K_m3_away'); processMatch(groupArray, 'RDC', 'COL', 'K_m4_home', 'K_m4_away'); processMatch(groupArray, 'POR', 'COL', 'K_m5_home', 'K_m5_away'); processMatch(groupArray, 'RDC', 'UZB', 'K_m6_home', 'K_m6_away'); }
+            if(groupId === 'L') { processMatch(groupArray, 'ING', 'CRO', 'L_m1_home', 'L_m1_away'); processMatch(groupArray, 'GHA', 'PAN', 'L_m2_home', 'L_m2_away'); processMatch(groupArray, 'ING', 'GHA', 'L_m3_home', 'L_m3_away'); processMatch(groupArray, 'CRO', 'PAN', 'L_m4_home', 'L_m4_away'); processMatch(groupArray, 'ING', 'PAN', 'L_m5_home', 'L_m5_away'); processMatch(groupArray, 'CRO', 'GHA', 'L_m6_home', 'L_m6_away'); }
+
+            groupArray.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                if (b.dg !== a.dg) return b.dg - a.dg;
+                return b.gf - a.gf;
+            });
+
+            renderTable(groupId, groupArray);
+            
+            if (typeof updateKnockouts === "function") updateKnockouts();
+            if (typeof saveData === "function") saveData();
+            
+           // renderFlags(); // Se dibuja la bandera de inmediato
+        }
+
+        // ==========================================
+        // 3. CÁLCULO DE CLASIFICADOS DIRECTOS (1ros y 2dos)
+        // ==========================================
+        function updateKnockouts() {
+            function setTeam(id, teamName) {
+                let el = document.getElementById(id);
+                if (el) el.innerHTML = teamName;
+            }
+
+            if (typeof teamsA !== 'undefined' && teamsA.length > 0) { setTeam('pos-1A', teamsA[0].name); setTeam('pos-2A', teamsA[1].name); }
+            if (typeof teamsB !== 'undefined' && teamsB.length > 0) { setTeam('pos-1B', teamsB[0].name); setTeam('pos-2B', teamsB[1].name); }
+            if (typeof teamsC !== 'undefined' && teamsC.length > 0) { setTeam('pos-1C', teamsC[0].name); setTeam('pos-2C', teamsC[1].name); }
+            if (typeof teamsD !== 'undefined' && teamsD.length > 0) { setTeam('pos-1D', teamsD[0].name); setTeam('pos-2D', teamsD[1].name); }
+            if (typeof teamsE !== 'undefined' && teamsE.length > 0) { setTeam('pos-1E', teamsE[0].name); setTeam('pos-2E', teamsE[1].name); }
+            if (typeof teamsF !== 'undefined' && teamsF.length > 0) { setTeam('pos-1F', teamsF[0].name); setTeam('pos-2F', teamsF[1].name); }
+            if (typeof teamsG !== 'undefined' && teamsG.length > 0) { setTeam('pos-1G', teamsG[0].name); setTeam('pos-2G', teamsG[1].name); }
+            if (typeof teamsH !== 'undefined' && teamsH.length > 0) { setTeam('pos-1H', teamsH[0].name); setTeam('pos-2H', teamsH[1].name); }
+            if (typeof teamsI !== 'undefined' && teamsI.length > 0) { setTeam('pos-1I', teamsI[0].name); setTeam('pos-2I', teamsI[1].name); }
+            if (typeof teamsJ !== 'undefined' && teamsJ.length > 0) { setTeam('pos-1J', teamsJ[0].name); setTeam('pos-2J', teamsJ[1].name); }
+            if (typeof teamsK !== 'undefined' && teamsK.length > 0) { setTeam('pos-1K', teamsK[0].name); setTeam('pos-2K', teamsK[1].name); }
+            if (typeof teamsL !== 'undefined' && teamsL.length > 0) { setTeam('pos-1L', teamsL[0].name); setTeam('pos-2L', teamsL[1].name); }
+            
+            if (typeof calculateBestThirds === "function") calculateBestThirds();
+        }
+
+        // ==========================================
+        // 4. MEJORES TERCEROS (CEREBRO BACKTRACKING)
+        // ==========================================
+        function calculateBestThirds() {
+            let thirds = [];
+            if (typeof teamsA !== 'undefined' && teamsA.length > 2) thirds.push({ ...teamsA[2], group: 'A' });
+            if (typeof teamsB !== 'undefined' && teamsB.length > 2) thirds.push({ ...teamsB[2], group: 'B' });
+            if (typeof teamsC !== 'undefined' && teamsC.length > 2) thirds.push({ ...teamsC[2], group: 'C' });
+            if (typeof teamsD !== 'undefined' && teamsD.length > 2) thirds.push({ ...teamsD[2], group: 'D' });
+            if (typeof teamsE !== 'undefined' && teamsE.length > 2) thirds.push({ ...teamsE[2], group: 'E' });
+            if (typeof teamsF !== 'undefined' && teamsF.length > 2) thirds.push({ ...teamsF[2], group: 'F' });
+            if (typeof teamsG !== 'undefined' && teamsG.length > 2) thirds.push({ ...teamsG[2], group: 'G' });
+            if (typeof teamsH !== 'undefined' && teamsH.length > 2) thirds.push({ ...teamsH[2], group: 'H' });
+            if (typeof teamsI !== 'undefined' && teamsI.length > 2) thirds.push({ ...teamsI[2], group: 'I' });
+            if (typeof teamsJ !== 'undefined' && teamsJ.length > 2) thirds.push({ ...teamsJ[2], group: 'J' });
+            if (typeof teamsK !== 'undefined' && teamsK.length > 2) thirds.push({ ...teamsK[2], group: 'K' });
+            if (typeof teamsL !== 'undefined' && teamsL.length > 2) thirds.push({ ...teamsL[2], group: 'L' });
+
+            // Puntos Fair Play FIFA: amarilla=-1, doble amonestación=-3, roja directa=-4, amarilla+roja directa=-5
+            const fairPlayThirds = {
+                'A': -4,  // COR: 4 amarillas
+                'B': -6,  // BOS: 6 amarillas
+                'C': -5,  // ESC: 5 amarillas
+                'D': -7,  // PAR: 7 amarillas
+                'E': -5,  // ECU: 5 amarillas
+                'F': -5,  // SUE: 5 amarillas
+                'G': -6,  // IRA: 6 amarillas
+                'H': -5,  // URU: 5 amarillas
+                'I':  0,  // SEN: sin datos suficientes
+                'J':  0,  // ALG: sin datos suficientes
+                'K': -5,  // RDC: 5 amarillas
+                'L': -3,  // GHA: 3 amarillas
+            };
+
+            // Ranking FIFA (menor número = mejor)
+            const fifaRankThirds = {
+                'A': 22, 'B': 60, 'C': 40, 'D': 62,
+                'E': 44, 'F': 24, 'G': 20, 'H': 17,
+                'I': 18, 'J': 30, 'K': 58, 'L': 55,
+            };
+
+            thirds.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                if (b.dg !== a.dg) return b.dg - a.dg;
+                if (b.gf !== a.gf) return b.gf - a.gf;
+                const fpA = fairPlayThirds[a.group] ?? 0;
+                const fpB = fairPlayThirds[b.group] ?? 0;
+                if (fpB !== fpA) return fpB - fpA;
+                const rankA = fifaRankThirds[a.group] ?? 999;
+                const rankB = fifaRankThirds[b.group] ?? 999;
+                return rankA - rankB;
+            });
+
+            let best8 = thirds.slice(0, 8);
+
+            let slots = [
+                { id: 'pos-3-P74', allowed: ['A','B','C','D','F'], teamName: '' },
+                { id: 'pos-3-P77', allowed: ['C','D','F','G','H'], teamName: '' },
+                { id: 'pos-3-P79', allowed: ['C','E','F','H','I'], teamName: '' },
+                { id: 'pos-3-P80', allowed: ['E','H','I','J','K'], teamName: '' },
+                { id: 'pos-3-P81', allowed: ['B','E','F','I','J'], teamName: '' },
+                { id: 'pos-3-P82', allowed: ['A','E','H','I','J'], teamName: '' },
+                { id: 'pos-3-P85', allowed: ['E','F','G','I','J'], teamName: '' },
+                { id: 'pos-3-P87', allowed: ['D','E','I','J','L'], teamName: '' }
+            ];
+
+            function assignTeams(slotIndex, availableTeams) {
+                if (slotIndex === slots.length) return true; 
+                for (let i = 0; i < availableTeams.length; i++) {
+                    let team = availableTeams[i];
+                    if (slots[slotIndex].allowed.includes(team.group)) {
+                        slots[slotIndex].teamName = team.name; 
+                        let remaining = [...availableTeams];
+                        remaining.splice(i, 1); 
+                        if (assignTeams(slotIndex + 1, remaining)) return true;
+                        slots[slotIndex].teamName = ''; 
+                    }
+                }
+                return false; 
+            }
+
+            assignTeams(0, best8);
+
+            slots.forEach(slot => {
+                let el = document.getElementById(slot.id);
+                if (el) el.innerHTML = slot.teamName !== '' ? slot.teamName : "3ro Pendiente";
+            });
+            
+         //   renderFlags(); // Dibujamos aquí también
+        }
+
+        function advanceKnockout(matchId, homeSpanId, awaySpanId, winnerDestId, loserDestId = null) {
+    let hInput = document.getElementById('K_m' + matchId + '_home');
+    let aInput = document.getElementById('K_m' + matchId + '_away');
+    
+    if (!hInput || !aInput || hInput.value === "" || aInput.value === "") return;
+    
+    // CAMBIO 1: Usamos innerHTML para capturar la bandera que ya está en el span
+    let hName = document.getElementById(homeSpanId).innerHTML;
+    let aName = document.getElementById(awaySpanId).innerHTML;
+    let hGoals = parseInt(hInput.value);
+    let aGoals = parseInt(aInput.value);
+    
+    let winnerName = (hGoals > aGoals) ? hName : (aGoals > hGoals ? aName : "");
+    let loserName = (hGoals > aGoals) ? aName : (aGoals > hGoals ? hName : "");
+    
+    if (winnerName === "") return;
+
+    
+    // Diccionario rápido para el podio
+    const nombreCompleto = {
+        'MEX': 'México', 'RSA': 'Sudáfrica', 'CZE': 'Rep. Checa', 'COR': 'Corea del Sur',
+        'CAN': 'Canadá', 'BOS': 'Bosnia', 'QAT': 'Qatar', 'SUI': 'Suiza',
+        'BRA': 'Brasil', 'MAR': 'Marruecos', 'HAI': 'Haití', 'ESC': 'Escocia',
+        'USA': 'EE.UU.', 'PAR': 'Paraguay', 'AUS': 'Australia', 'TUR': 'Turquía',
+        'ALE': 'Alemania', 'CUR': 'Curazao', 'CDM': 'C. de Marfil', 'ECU': 'Ecuador',
+        'PBA': 'Países Bajos', 'JAP': 'Japón', 'SUE': 'Suecia', 'TUN': 'Túnez',
+        'BEL': 'Bélgica', 'EGI': 'Egipto', 'IRA': 'Irán', 'NZL': 'N. Zelanda',
+        'ESP': 'España', 'CAB': 'Cabo Verde', 'ARA': 'Arabia S.', 'URU': 'Uruguay',
+        'FRA': 'Francia', 'SEN': 'Senegal', 'IRQ': 'Irak', 'NOR': 'Noruega',
+        'ARG': 'Argentina', 'ALG': 'Argelia', 'AUT': 'Austria', 'JOR': 'Jordania',
+        'POR': 'Portugal', 'RDC': 'RD Congo', 'UZB': 'Uzbekistán', 'COL': 'Colombia',
+        'ING': 'Inglaterra', 'CRO': 'Croacia', 'GHA': 'Ghana', 'PAN': 'Panamá'
+    };
+
+    function traducir(textoCompleto) {
+    // 1. Extraemos la sigla (los primeros 3 caracteres o lo que detecte)
+    // Buscamos si el texto tiene la estructura de bandera que creamos antes
+    let sigla = "";
+    for (let tag in nombreCompleto) {
+        if (textoCompleto.includes(tag)) {
+            sigla = tag;
+            break;
+        }
+    }
+
+    // 2. Si detectamos una sigla (ej: 'ARG'), devolvemos el HTML completo para el podio
+    if (sigla) {
+        return `
+            <div class="podium-container">
+                <div class="bg-flag f-${sigla}"></div>
+                <span class="podium-text">${nombreCompleto[sigla]}</span>
+            </div>
+        `;
+    }
+    
+    // Si no encuentra sigla, devuelve el texto como estaba
+    return textoCompleto;
+}
+
+    // MIGRACIÓN Y TRADUCCIÓN
+let destW = document.getElementById(winnerDestId);
+if (destW) {
+    // CAMBIO: Primero limpiamos el destino y luego insertamos el HTML completo
+    destW.innerHTML = winnerDestId.includes('podium') ? traducir(winnerName) : winnerName;
+}
+
+if (loserDestId) {
+    let destL = document.getElementById(loserDestId);
+    if (destL) {
+        // CAMBIO: Igual aquí
+        destL.innerHTML = loserDestId.includes('podium') ? traducir(loserName) : loserName;
+    }
+}
+    
+    if (typeof saveData === "function") saveData();
+} 
+        // ==========================================
+        // 6. MEMORIA Y ARRANQUE INICIAL
+        // ==========================================
+        function saveData() {
+            let inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => { if (input.id) localStorage.setItem(input.id, input.value); });
+        }
+
+        function loadData() {
+            let inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                if (input.id && localStorage.getItem(input.id) !== null) {
+                    input.value = localStorage.getItem(input.id);
+                }
+            });
+        }
+
+        window.onload = function() {
+            loadData();
+            if (typeof teamsA !== 'undefined') calculateGroup('A', teamsA);
+            if (typeof teamsB !== 'undefined') calculateGroup('B', teamsB);
+            if (typeof teamsC !== 'undefined') calculateGroup('C', teamsC);
+            if (typeof teamsD !== 'undefined') calculateGroup('D', teamsD);
+            if (typeof teamsE !== 'undefined') calculateGroup('E', teamsE);
+            if (typeof teamsF !== 'undefined') calculateGroup('F', teamsF);
+            if (typeof teamsG !== 'undefined') calculateGroup('G', teamsG);
+            if (typeof teamsH !== 'undefined') calculateGroup('H', teamsH);
+            if (typeof teamsI !== 'undefined') calculateGroup('I', teamsI);
+            if (typeof teamsJ !== 'undefined') calculateGroup('J', teamsJ);
+            if (typeof teamsK !== 'undefined') calculateGroup('K', teamsK);
+            if (typeof teamsL !== 'undefined') calculateGroup('L', teamsL);
+            
+        };
+  
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(registration => {
+              console.log('Service Worker registrado con éxito');
+            })
+            .catch(error => {
+              console.log('Fallo al registrar el Service Worker:', error);
+            });
+        });
+      }
+    </script>
+    <script>
+        // Acá pegás el JavaScript
+        const CODIGOS_VALIDOS = ["MUNDIAL10K", "MENDOZA2026", "CAMPEON"]; 
+
+        document.addEventListener("DOMContentLoaded", () => {
+          if (localStorage.getItem("acceso_fixture_pagado") === "true") {
+            document.getElementById("paywall-overlay").style.display = "none";
+          }
+        });
+
+        function verificarAcceso() {
+          const inputCodigo = document.getElementById("codigo-acceso").value.trim().toUpperCase();
+          
+          if (CODIGOS_VALIDOS.includes(inputCodigo)) {
+            localStorage.setItem("acceso_fixture_pagado", "true");
+            document.getElementById("paywall-overlay").style.display = "none";
+          } else {
+            document.getElementById("error-msg").style.display = "block";
+          }
+        }
+        function togglePassword() {
+  const input = document.getElementById("codigo-acceso");
+  if (input.type === "password") {
+    input.type = "text";
+  } else {
+    input.type = "password";
+  }
+}
+          function exportarResultados() {
+    const datosProcesados = {};
+    let hayDatos = false;
+
+    // 1. Recolección de datos
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key === 'acceso_fixture_pagado') continue;
+        
+        hayDatos = true;
+        let partidoId = key;
+        let tipo = "local";
+
+        if (key.match(/(_home|_local|_l)$/i)) {
+            partidoId = key.replace(/(_home|_local|_l)$/i, '');
+            tipo = "local";
+        } else if (key.match(/(_away|_visitante|_v)$/i)) {
+            partidoId = key.replace(/(_away|_visitante|_v)$/i, '');
+            tipo = "visitante";
+        }
+
+        if (!datosProcesados[partidoId]) {
+            datosProcesados[partidoId] = { local: '-', visitante: '-' };
+        }
+        
+        if (tipo === "local") {
+            datosProcesados[partidoId].local = localStorage.getItem(key);
+        } else {
+            datosProcesados[partidoId].visitante = localStorage.getItem(key);
+        }
+    }
+
+    if (!hayDatos) {
+        alert("⚠️ No hay resultados cargados aún para exportar.");
+        return;
+    }
+
+    // --- FUNCIÓN ESPÍA PRECISA ---
+    function obtenerNombresPantalla(idBase) {
+        let input = document.getElementById(idBase + '_home');
+        if (!input) return "Llave Pendiente"; 
+        
+        let fila = input.closest('.match-row');
+        if (!fila) return "Llave Pendiente";
+        
+        let equipos = fila.querySelectorAll('.team-name');
+        if (equipos.length >= 2) {
+            let local = equipos[0].textContent.replace(/[\n\r]/g, '').trim();
+            let visitante = equipos[1].textContent.replace(/[\n\r]/g, '').trim();
+            return `${local} vs ${visitante}`;
+        }
+        return "Partido";
+    }
+
+    // --- TRADUCTOR Y ORDENADOR INTELIGENTE ---
+    function procesarInfoPartido(codigo) {
+        // Primero verificamos si es de fase eliminatoria (K_m73 a K_m104)
+        let matchKnockout = codigo.match(/^K_m(\d+)$/i);
+        if (matchKnockout) {
+            let m = parseInt(matchKnockout[1]);
+            // Excepción: El Grupo K usa K_m1 a K_m6. Si es menor a 70, lo dejamos pasar al filtro de grupos.
+            if (m >= 73) {
+                if (m <= 88) return { tipo: 'E', fase: '16avos', orden: m, nombre: `16avos - Partido ${m-72}` };
+                if (m <= 96) return { tipo: 'E', fase: 'Octavos', orden: m, nombre: `Octavos - P. ${m-88}` };
+                if (m <= 100) return { tipo: 'E', fase: 'Cuartos', orden: m, nombre: `Cuartos - P. ${m-96}` };
+                if (m <= 102) return { tipo: 'E', fase: 'Semifinal', orden: m, nombre: `Semifinal ${m-100}` };
+                if (m === 103) return { tipo: 'E', fase: '3er Puesto', orden: m, nombre: `Tercer Puesto` };
+                if (m === 104) return { tipo: 'E', fase: 'Final', orden: m, nombre: `🏆 LA GRAN FINAL` };
+            }
+        }
+        
+        // Si no era eliminatoria, es un Grupo (A_m1 hasta L_m6)
+        let matchGrupo = codigo.match(/^([A-L])_m(\d+)$/i);
+        if (matchGrupo) {
+            let grupo = matchGrupo[1].toUpperCase();
+            let num = parseInt(matchGrupo[2]);
+            let fecha = (num <= 2) ? 1 : ((num <= 4) ? 2 : 3);
+            let ordenMatematico = (grupo.charCodeAt(0) * 10) + num; // Esto asegura que la A va primero, luego B...
+            
+            return { tipo: 'G', fase: `Grupo ${grupo}`, orden: ordenMatematico, nombre: `Grupo ${grupo} - Fecha ${fecha}` };
+        }
+        
+        return { tipo: 'X', fase: 'Otro', orden: 999, nombre: codigo };
+    }
+
+    // 2. Clasificar, Traducir y Ordenar
+    let listaPartidos = [];
+    for (const partidoId in datosProcesados) {
+        let pInfo = procesarInfoPartido(partidoId);
+        let m = datosProcesados[partidoId];
+        let resultado = m.visitante !== "-" ? `${m.local} - ${m.visitante}` : m.local;
+        
+        listaPartidos.push({
+            tipo: pInfo.tipo,
+            orden: pInfo.orden,
+            nombreFase: pInfo.nombre,
+            nombresPaises: obtenerNombresPantalla(partidoId),
+            resultado: resultado
+        });
+    }
+
+    // Ordenar de menor a mayor según la matemática que armamos
+    listaPartidos.sort((a, b) => a.orden - b.orden);
+
+    // 3. Crear la estructura exacta (Matriz) para garantizar Lado a Lado
+    let pGrupos = listaPartidos.filter(p => p.tipo === 'G');
+    let pEliminatorias = listaPartidos.filter(p => p.tipo === 'E');
+
+    let excelData = [];
+    
+    // Fila 0 y 1: Título principal y espacio
+    excelData.push(["🏆 FIXTURE MUNDIAL 2026 - PREDICCIONES DEL USUARIO 🏆", "", "", "", "", "", ""]);
+    excelData.push(["", "", "", "", "", "", ""]); 
+    
+    // Fila 2: Títulos Lado a Lado
+    excelData.push(["FASE DE GRUPOS", "", "", "", "FASE ELIMINATORIA (LLAVES)", "", ""]);
+    
+    // Fila 3: Encabezados de columnas
+    excelData.push(["Instancia", "Encuentro", "Pronóstico", "", "Instancia", "Encuentro", "Pronóstico"]);
+
+    // Llenar las filas comparando lado izquierdo (Grupos) y derecho (Eliminatorias)
+    let maxRows = Math.max(pGrupos.length, pEliminatorias.length);
+    for (let i = 0; i < maxRows; i++) {
+        let g = pGrupos[i] || { nombreFase: "", nombresPaises: "", resultado: "" };
+        let e = pEliminatorias[i] || { nombreFase: "", nombresPaises: "", resultado: "" };
+        
+        excelData.push([
+            g.nombreFase, g.nombresPaises, g.resultado, 
+            "", // Columna D vacía (actúa como separador visual)
+            e.nombreFase, e.nombresPaises, e.resultado
+        ]);
+    }
+
+    // 4. Generar el libro y aplicar estilos premium
+    let workbook = XLSX.utils.book_new();
+    let ws = XLSX.utils.aoa_to_sheet(excelData);
+
+    // Combinar celdas para centrar los títulos
+    ws['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }, // Título principal (A1 a G1)
+        { s: { r: 2, c: 0 }, e: { r: 2, c: 2 } }, // Título Grupos (A3 a C3)
+        { s: { r: 2, c: 4 }, e: { r: 2, c: 6 } }  // Título Eliminatorias (E3 a G3)
+    ];
+
+    // Aplicar estilos celda por celda
+    for (let key in ws) {
+        if (key[0] === '!') continue; 
+        
+        let celda = ws[key];
+        let valor = celda.v ? celda.v.toString() : "";
+        let isColD = key.replace(/[0-9]/g, '') === 'D'; // Detectar la columna separadora
+
+        // Fondo base y bordes (salvo en la columna separadora)
+        if (!isColD && valor !== "") {
+            celda.s = {
+                alignment: { vertical: "center", horizontal: "center" },
+                border: {
+                    top: { style: "thin", color: { rgb: "CBD5E1" } },
+                    bottom: { style: "thin", color: { rgb: "CBD5E1" } },
+                    left: { style: "thin", color: { rgb: "CBD5E1" } },
+                    right: { style: "thin", color: { rgb: "CBD5E1" } }
+                }
+            };
+        } else {
+            celda.s = { alignment: { vertical: "center", horizontal: "center" } };
+        }
+
+        // Títulos y colores
+        if (valor.includes("FIXTURE MUNDIAL 2026")) {
+            celda.s.font = { bold: true, color: { rgb: "FFFFFF" }, sz: 14 };
+            celda.s.fill = { fgColor: { rgb: "001F3F" } };
+        } else if (valor === "FASE DE GRUPOS" || valor === "FASE ELIMINATORIA (LLAVES)") {
+            celda.s.font = { bold: true, color: { rgb: "FFFFFF" }, sz: 12 };
+            celda.s.fill = { fgColor: { rgb: "003366" } };
+        } else if (valor === "Instancia" || valor === "Encuentro" || valor === "Pronóstico") {
+            celda.s.font = { bold: true, color: { rgb: "1E3A8A" } };
+            celda.s.fill = { fgColor: { rgb: "E2E8F0" } };
+        } else if (valor.includes("Grupo") || valor.includes("avos") || valor.includes("Cuartos") || valor.includes("Semifinal") || valor.includes("Final") || valor.includes("Puesto")) {
+            celda.s.font = { bold: true, color: { rgb: "000080" } };
+            celda.s.fill = { fgColor: { rgb: "F8FAFC" } }; 
+        } else if (valor.includes("-") && valor.length < 6) {
+            celda.s.font = { bold: true, color: { rgb: "1E3A8A" } };
+            celda.s.fill = { fgColor: { rgb: "E0E7FF" } };
+        }
+    }
+
+    // Ajustar anchos
+    ws['!cols'] = [
+        { wch: 22 }, { wch: 18 }, { wch: 12 }, { wch: 3 }, { wch: 22 }, { wch: 18 }, { wch: 12 }
+    ];
+
+    XLSX.utils.book_append_sheet(workbook, ws, "Predicciones 2026");
+    XLSX.writeFile(workbook, "Predicciones_Mundial2026.xlsx");
+}
+    // ==========================================
+    // NAVEGACIÓN INTELIGENTE DE CASILLEROS
+    // ==========================================
+    let inputsOrdenados = [];
+
+    function obtenerInputsOrdenados() {
+        // Si ya los ordenamos, no lo volvemos a hacer para ahorrar memoria
+        if (inputsOrdenados.length > 0) return inputsOrdenados;
+
+        let inputs = Array.from(document.querySelectorAll('input[type="number"]'));
+        
+        // Ordenamos los casilleros según la lógica del torneo y no según el HTML
+        inputs.sort((a, b) => {
+            function getPesoLogico(id) {
+                if (!id) return 999999;
+                
+                // Cortamos el ID. Ej: "A_m1_home" -> ["A", "m1", "home"]
+                let partes = id.split('_'); 
+                if (partes.length < 3) return 999999;
+                
+                let letra = partes[0]; // "A", "B", "K", etc.
+                let numero = parseInt(partes[1].replace('m', '')); // 1, 73, etc.
+                let esVisitante = (partes[2] === 'away' || partes[2] === 'visitante' || partes[2] === 'v') ? 1 : 0;
+                
+                // 1. Fase Eliminatoria (empiezan con K y número mayor a 72) van al final
+                if (letra === 'K' && numero >= 73) {
+                    return 100000 + (numero * 10) + esVisitante;
+                }
+                
+                // 2. Fase de Grupos (A hasta L) van primero en estricto orden alfabético
+                let valorGrupo = letra.charCodeAt(0); 
+                return (valorGrupo * 1000) + (numero * 10) + esVisitante;
+            }
+            
+            return getPesoLogico(a.id) - getPesoLogico(b.id);
+        });
+
+        // Aplicamos el orden a la propiedad "tabIndex" para que la tecla TAB en PC también funcione perfecto
+        inputs.forEach((input, i) => {
+            input.tabIndex = i + 1;
+        });
+
+        inputsOrdenados = inputs;
+        return inputsOrdenados;
+    }
+
+    // El evento que detecta cuando escribís un número
+    document.addEventListener('input', function(e) {
+        if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'number') {
+            
+            // Si ya escribió un dígito...
+            if (e.target.value.length >= 1) {
+                let inputs = obtenerInputsOrdenados();
+                const index = inputs.indexOf(e.target);
+                
+                // Si hay un casillero siguiente en nuestra lista ordenada, saltamos
+                if (index > -1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                    inputs[index + 1].select();
+                }
+            }
+        }
+    });
+      </script>
+
+   <script type="module">
+  // 1. Importaciones de Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-messaging.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  // 2. Configuración e Inicialización (Siempre va antes de usar las funciones)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhtpnaLYjpAwS_Q3JqDQcU8IeDjHN8mOw",
+    authDomain: "fixturemundial2026-ab189.firebaseapp.com",
+    projectId: "fixturemundial2026-ab189",
+    storageBucket: "fixturemundial2026-ab189.firebasestorage.app",
+    messagingSenderId: "926358579370",
+    appId: "1:926358579370:web:fe74f9c5381ca7a5a888d3",
+    measurementId: "G-NN7L9P5KHF"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const analytics = getAnalytics(app);
+  const messaging = getMessaging(app);
+
+  // 3. Pedir permiso de Notificaciones al usuario
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Permiso concedido por el usuario.');
+      
+      // 4. Generar el Token y guardarlo en Firestore
+      getToken(messaging, { vapidKey: 'BDZeNl65hoM2s-zE6bTVwgygvtRpfSKwsBMiuxyhMZSfQoxH4LY4yjpoVvGf0SzC08DtD9VBb2aSqNkD57cEqS0' })
+      .then((currentToken) => {
+        if (currentToken) {
+          
+          setDoc(doc(db, "tokens_usuarios", currentToken), {
+            token: currentToken,
+            fecha: new Date()
+          }).then(() => {
+            console.log('¡Éxito! Token guardado en Firestore.');
+          }).catch((error) => {
+            console.error('Error al guardar en la base de datos:', error);
+          });
+
+        } else {
+          console.log('No se pudo obtener el token.');
+        }
+      }).catch((err) => {
+        console.log('Error de Firebase al intentar conectar:', err);
+      });
+
+    } else {
+      console.log('El usuario denegó el permiso.');
+    }
+  });
+</script>
+</body>
+</html>
