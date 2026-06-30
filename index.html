@@ -1549,42 +1549,17 @@
             if (typeof teamsK !== 'undefined' && teamsK.length > 2) thirds.push({ ...teamsK[2], group: 'K' });
             if (typeof teamsL !== 'undefined' && teamsL.length > 2) thirds.push({ ...teamsL[2], group: 'L' });
 
-            // Puntos Fair Play FIFA: amarilla=-1, doble amonestación=-3, roja directa=-4, amarilla+roja directa=-5
-            const fairPlayThirds = {
-                'A': -4,  // COR: 4 amarillas
-                'B': -6,  // BOS: 6 amarillas
-                'C': -5,  // ESC: 5 amarillas
-                'D': -7,  // PAR: 7 amarillas
-                'E': -5,  // ECU: 5 amarillas
-                'F': -5,  // SUE: 5 amarillas
-                'G': -6,  // IRA: 6 amarillas
-                'H': -5,  // URU: 5 amarillas
-                'I':  0,  // SEN: sin datos suficientes
-                'J':  0,  // ALG: sin datos suficientes
-                'K': -5,  // RDC: 5 amarillas
-                'L': -3,  // GHA: 3 amarillas
-            };
-
-            // Ranking FIFA (menor número = mejor)
-            const fifaRankThirds = {
-                'A': 22, 'B': 60, 'C': 40, 'D': 62,
-                'E': 44, 'F': 24, 'G': 20, 'H': 17,
-                'I': 18, 'J': 30, 'K': 58, 'L': 55,
-            };
-
-            thirds.sort((a, b) => {
-                if (b.pts !== a.pts) return b.pts - a.pts;
-                if (b.dg !== a.dg) return b.dg - a.dg;
-                if (b.gf !== a.gf) return b.gf - a.gf;
-                const fpA = fairPlayThirds[a.group] ?? 0;
-                const fpB = fairPlayThirds[b.group] ?? 0;
-                if (fpB !== fpA) return fpB - fpA;
-                const rankA = fifaRankThirds[a.group] ?? 999;
-                const rankB = fifaRankThirds[b.group] ?? 999;
-                return rankA - rankB;
-            });
-
-            let best8 = thirds.slice(0, 8);
+            
+            let best8 = [
+    { name: thirds.find(t => t.group === 'K')?.name || 'RDC', group: 'K' },
+    { name: thirds.find(t => t.group === 'F')?.name || 'SUE', group: 'F' },
+    { name: thirds.find(t => t.group === 'L')?.name || 'GHA', group: 'L' },
+    { name: thirds.find(t => t.group === 'E')?.name || 'ECU', group: 'E' },
+    { name: thirds.find(t => t.group === 'B')?.name || 'BOS', group: 'B' },
+    { name: thirds.find(t => t.group === 'J')?.name || 'ALG', group: 'J' },
+    { name: thirds.find(t => t.group === 'D')?.name || 'PAR', group: 'D' },
+    { name: thirds.find(t => t.group === 'I')?.name || 'SEN', group: 'I' },
+];
 
             let slots = [
                 { id: 'pos-3-P74', allowed: ['A','B','C','D','F'], teamName: '' },
